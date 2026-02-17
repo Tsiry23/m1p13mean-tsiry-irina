@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: 'sidebar.html',
   styleUrls: ['sidebar.css']
 })
-export class Sidebar implements OnInit {
+export class SidebarComponent implements OnInit {
   isActive = false;
   isStockOpen = false;
 

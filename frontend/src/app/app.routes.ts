@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Home } from './pages/home/home';
-import { HomeComponent } from './pages/admin-home/admin-home.component';
+import { HomeComponent } from './pages/admin-home/admin-home';
 
 export const routes: Routes = [
   { path: '', component: Home },

@@ -1,37 +1,20 @@
 /* ============================================
-   VARIABLES DE COULEURS — modifier ici
-   ============================================ */
-:root {
-  --sidebar-bg:            #3c6e71;   /* Fond principal de la sidebar          */
-  --sidebar-hover-bg:      rgba(255, 255, 255, 0.18);
-  --sidebar-active-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  --sidebar-text:          #ffffff;
-  --sidebar-subtext:       rgba(255, 255, 255, 0.75);
-  --sidebar-sub-hover-bg:  rgba(255, 255, 255, 0.12);
-  --sidebar-sub-hover-text:#ffffff;
-  --sidebar-radius:        25px;
-  --sidebar-width-closed:  80px;
-  --sidebar-width-open:    240px;
-  --sidebar-transition:    all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ============================================
    BASE SIDEBAR
    ============================================ */
 #sidebar {
-  min-width: var(--sidebar-width-closed);
-  max-width: var(--sidebar-width-closed);
+  min-width: 80px;
+  max-width: 80px;
   height: 95%;
   position: fixed;
   top: 20px;
   left: 15px;
   z-index: 100;
-  border-radius: var(--sidebar-radius);
-  background: var(--sidebar-bg);
+  border-radius: 25px;
+  background: #3c6e71;
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-  color: var(--sidebar-text);
-  transition: var(--sidebar-transition);
+  color: #ffffff;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-x: hidden;
   overflow-y: auto;
   display: flex;
@@ -40,9 +23,9 @@
 
 /* Etat ouvert */
 #sidebar.active {
-  min-width: var(--sidebar-width-open);
-  max-width: var(--sidebar-width-open);
-  box-shadow: var(--sidebar-active-shadow);
+  min-width: 240px;
+  max-width: 240px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
 }
 
 /* ============================================
@@ -80,10 +63,11 @@
 .nav-link {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 10px 18px;
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--sidebar-text);
+  color: #ffffff;
   text-decoration: none;
   border-radius: 12px;
   margin: 2px 10px;
@@ -93,8 +77,12 @@
   overflow: hidden;
 }
 
+#sidebar.active .nav-link {
+  justify-content: flex-start;
+}
+
 .nav-link:hover {
-  background: var(--sidebar-hover-bg);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .nav-icon {
@@ -104,8 +92,8 @@
   transition: transform 0.25s ease;
 }
 
-/* Espacement icône ↔ texte */
-.nav-link .nav-icon + .nav-link-text { margin-left: 12px; }
+/* Espacement icône ↔ texte (seulement quand ouverte) */
+#sidebar.active .nav-link .nav-icon + .nav-link-text { margin-left: 12px; }
 
 /* Texte masqué quand réduit */
 .nav-link-text {
@@ -158,7 +146,7 @@
 }
 
 .dropdown-body.visible {
-  max-height: 300px;  /* Suffisamment grand pour les sous-items */
+  max-height: 300px;
   opacity: 1;
 }
 
@@ -172,7 +160,7 @@
 .sub-link {
   display: block;
   font-size: 0.875rem;
-  color: var(--sidebar-subtext);
+  color: rgba(255, 255, 255, 0.75);
   padding: 6px 12px;
   border-radius: 10px;
   text-decoration: none;
@@ -181,8 +169,8 @@
 }
 
 .sub-link:hover {
-  background: var(--sidebar-sub-hover-bg);
-  color: var(--sidebar-sub-hover-text);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
 /* ============================================
