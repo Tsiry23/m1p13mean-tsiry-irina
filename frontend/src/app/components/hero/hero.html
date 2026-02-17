@@ -3,8 +3,10 @@
 
     <div class="carousel-inner">
 
+      <!-- Slide 1 -->
       <div class="carousel-item active">
-        <div class="hero-slide d-flex align-items-center justify-content-center text-white">
+        <div class="hero-slide d-flex align-items-center justify-content-center text-white"
+             style="background-image: url('/img/mall1.jpg')">
           <div class="text-center">
             <h1>Bienvenue au centre commercial</h1>
             <h2>m1p13meantsiryirina</h2>
@@ -15,7 +17,29 @@
         </div>
       </div>
 
+      <!-- Slide 2 -->
+      <div class="carousel-item">
+        <div class="hero-slide d-flex align-items-center justify-content-center text-white"
+             style="background-image: url('/img/mall2.jpg')">
+          <div class="text-center">
+            <h1>Découvrez nos boutiques</h1>
+            <h2>Tout ce que vous aimez sous un même toit</h2>
+            <button class="btn btn-primary mt-3" routerLink="/login">
+              Voir les produits
+            </button>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+    <!-- Contrôles -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselHero" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselHero" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
 
   </div>
 </section>
