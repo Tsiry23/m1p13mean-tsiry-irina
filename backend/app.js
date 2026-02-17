@@ -4,8 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+require('dotenv').config();
+
+const mongoose = require('mongoose');
+// Connexion à MongoDB
+mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB connecté"))
+ .catch(err => console.log(err));
+
 var indexRouter = require('./routes/index');
 var UtilisateurRouter = require('./routes/Utilisateur');
+var RoleRouter = require('./routes/Role');
 
 var app = express();
 
@@ -21,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/Utilisateur', UtilisateurRouter);
+app.use('/Role', RoleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
