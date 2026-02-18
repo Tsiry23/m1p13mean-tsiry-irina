@@ -1,1 +1,15 @@
-<p>login works!</p>
+<div class="login-container">
+
+  <h1>Connexion</h1>
+  <!-- ton formulaire -->
+
+  @if (processedValue(); as val) {
+    <div class="processed-info">
+      <p>Valeur reçue et traitée :</p>
+      <strong>{{ val }}</strong>
+    </div>
+  } @else {
+    <p class="info-muted">Aucune valeur dans l'URL (?value=...)</p>
+  }
+
+</div>
