@@ -11,6 +11,10 @@ const ProduitSchema = new mongoose.Schema(
       type: Buffer,
       required: false,
     },
+    nom: {
+      type: String,
+      required: false
+    },
     qt_actuel: {
       type: Number,
       required: true,

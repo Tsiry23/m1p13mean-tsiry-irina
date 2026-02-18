@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Role = require('../models/Role');
 
-router.post('/initier', async (req, res) => {
+router.get('/init', async (req, res) => {
   try {
     const rolesAInitialiser = [
       "admin du centre commercial",

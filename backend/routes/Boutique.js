@@ -23,6 +23,30 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/init", async (req, res) => {
+
+  console.log("TAFIDITRA");
+
+  try {
+    let boutiques = [];
+  
+    boutiques.push(new Boutique({ nom : "San Marina", description : "Magasin chaussure" , taille_m2 : 125, loyer : 5625000, image : "boutique1.jpg" }));
+    boutiques.push(new Boutique({ nom : "Christian Dior parfum", description : "Magasin parfum" , taille_m2 : 50, loyer : 3400000, image : "boutique2.jpg" }));
+    boutiques.push(new Boutique({ nom : "Food & friends", description : "Food court" ,taille_m2 : 200, loyer : 9000000, image : "boutique3.jpg" }));
+    boutiques.push(new Boutique({ nom : "Patatam", description : "Magasin de vêtements", taille_m2 : 150, loyer : 7500000, image : "boutique4.jpg" }));
+    boutiques.push(new Boutique({ nom : "Delicious", description : "Foodcourt" , taille_m2 : 150, loyer : 9000000, image : "boutique5.jpg" }));
+
+    for (const boutique of boutiques) {
+      await boutique.save();
+    }
+
+    res.status(200).json(boutiques);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Lire une boutique par ID
 router.get("/:id", async (req, res) => {
   try {
