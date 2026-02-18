@@ -21,7 +21,4 @@ const RoleSchema = new mongoose.Schema(
   }
 );
 
-// Index pour recherche rapide sur nom (déjà unique mais on le rend explicite)
-RoleSchema.index({ nom: 1 });
-
 module.exports = mongoose.model('Role', RoleSchema);

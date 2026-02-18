@@ -5,6 +5,8 @@ import { Hero } from '../../components/hero/hero';
 import { Services } from '../../components/services/services';
 import { Contact } from '../../components/contact/contact';
 import { Footer } from '../../components/footer/footer';
+import { BoutiqueSliderComponent } from '../../components/boutique-slider/boutique-slider';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -14,6 +16,7 @@ import { Footer } from '../../components/footer/footer';
     Services,
     Contact,
     Footer,
+    BoutiqueSliderComponent
   ],
   templateUrl: './home.html'
 })

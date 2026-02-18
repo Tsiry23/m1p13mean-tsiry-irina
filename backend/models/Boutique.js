@@ -7,6 +7,10 @@ const BoutiqueSchema = new mongoose.Schema(
       required: true,
       maxlength: 255,
     },
+    description: {
+      type: String,
+      required: false
+    },
     taille_m2: {
       type: Number,
       required: false,
@@ -14,6 +18,10 @@ const BoutiqueSchema = new mongoose.Schema(
     loyer: {
       type: Number,
       required: false,
+    },
+    image: {
+      type: String,
+      required: true
     },
   },
   {

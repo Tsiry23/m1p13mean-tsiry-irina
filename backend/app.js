@@ -14,6 +14,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB connect√
 var indexRouter = require('./routes/index');
 var UtilisateurRouter = require('./routes/Utilisateur');
 var RoleRouter = require('./routes/Role');
+var BoutiqueRouter = require('./routes/Boutique');
 
 var app = express();
 
@@ -28,8 +29,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/Utilisateur', UtilisateurRouter);
-app.use('/Role', RoleRouter);
+app.use('/utilisateur', UtilisateurRouter);
+app.use('/role', RoleRouter);
+app.use('/boutique', BoutiqueRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
