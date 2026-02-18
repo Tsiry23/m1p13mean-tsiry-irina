@@ -1,0 +1,11 @@
+Créer un composant :
+ng generate component components/nomducomposant
+
+Créer un service :
+ng generate service services/nomduservice
+
+Créer une page :
+ng generate component pages/nomdelapage
+
+lancement :
+ng serve

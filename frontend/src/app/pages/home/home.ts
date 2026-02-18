@@ -5,7 +5,6 @@ import { Hero } from '../../components/hero/hero';
 import { Services } from '../../components/services/services';
 import { Contact } from '../../components/contact/contact';
 import { Footer } from '../../components/footer/footer';
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -14,7 +13,7 @@ import { Footer } from '../../components/footer/footer';
     Hero,
     Services,
     Contact,
-    Footer
+    Footer,
   ],
   templateUrl: './home.html'
 })
