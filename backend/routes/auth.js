@@ -1,0 +1,49 @@
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Utilisateur = require('../models/Utilisateur');
+require('dotenv').config();
+
+const SECRET = process.env.SUPER_SECRET_KEY;
+
+router.post('/login', async (req, res) => {
+  try {
+    const { email, mdp } = req.body;
+    console.log({ email, mdp });
+    
+    const user = await Utilisateur.findOne({ email }).select('+mdp').populate('id_role', 'nom');
+    console.log("HEY YOU 1");
+    
+    if (!user) {
+      return res.status(401).json({ message: "Email invalide" });
+    }
+    console.log("HEY YOU 2");
+    
+    const isMatch = await bcrypt.compare(mdp, user.mdp);
+    console.log("HEY YOU 3");
+    
+    if (!isMatch) {
+      return res.status(401).json({ message: "Mot de passe invalide" });
+    }
+    
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.id_role.nom
+      },
+      SECRET,
+      { expiresIn: "24h" }
+    );
+
+    res.json({
+      success: true,
+      token
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Erreur login" });
+  }
+});
+
+module.exports = router;
