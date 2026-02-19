@@ -1,0 +1,22 @@
+#container {
+  --main-color: #0077B6;
+}
+
+h1 {
+  color: var(--main-color);
+}
+
+.btn-primary {
+  background-color: var(--main-color);
+  border-color: var(--main-color);
+}
+
+.btn-primary:hover {
+  background-color: #005f91;
+  border-color: #005f91;
+}
+
+.form-control:focus {
+  border-color: var(--main-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 119, 182, 0.25);
+}

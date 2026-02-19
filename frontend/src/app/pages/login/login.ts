@@ -1,27 +1,50 @@
-import { Component, computed, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth';
 
 @Component({
   selector: 'app-login',
   standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: ['./login.css']
 })
 export class Login {
 
-  private route = inject(ActivatedRoute);
+  email = '';
+  mdp = '';
+  errorMessage = '';
+  loading = false;
 
-  // 1. Récupère ?type=admin
-  rawValue = computed(() =>
-    this.route.snapshot.queryParamMap.get('type')
-  );
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
-  // 2. Traitement
-  processedValue = computed(() => {
-    const val = this.rawValue();
-    if (!val) return null;
+  processedValue() {
+    return null;
+  }
 
-    return val.trim().toUpperCase();
-  });
+  login() {
+    this.errorMessage = '';
+    this.loading = true;
 
+    this.auth.login(this.email, this.mdp).subscribe({
+      next: () => {
+        this.loading = false;
+
+        console.log("ça fonctionne");
+        // this.router.navigate(['/dashboard']); // adapte si besoin
+      },
+      error: (err) => {
+        this.loading = false;
+
+        // Message renvoyé par ton backend Node.js
+        this.errorMessage =
+          err?.error?.message || 'Erreur lors de la connexion';
+      }
+    });
+  }
 }
