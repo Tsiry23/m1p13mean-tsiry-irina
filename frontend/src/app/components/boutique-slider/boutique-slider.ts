@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BoutiqueService } from '../../services/boutique';
+import { BoutiqueService } from '../../services/boutique/boutique';
 import { Boutique } from '../../models/boutique.model';
 import { CommonModule } from '@angular/common';
 
