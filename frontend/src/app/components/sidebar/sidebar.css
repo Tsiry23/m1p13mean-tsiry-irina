@@ -1,8 +1,7 @@
 /* https://coolors.co/palette/03045e-0077b6-00b4d8-90e0ef-caf0f8 */
 
 #sidebar {
-  /* Couleurs */
-  --sidebar-bg: #0077B6;
+  --main-color: #0077B6;
   --text-color: #ffffff;
   --text-muted: rgba(255, 255, 255, 0.75);
 
@@ -46,7 +45,7 @@
   left: 15px;
   z-index: 100;
   border-radius: var(--sidebar-radius);
-  background: var(--sidebar-bg);
+  background: var(--main-color);
   backdrop-filter: var(--blur);
   box-shadow: var(--shadow);
   color: var(--text-color);
