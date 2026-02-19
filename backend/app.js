@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require("cors");
-
 require('dotenv').config();
 
 const mongoose = require('mongoose');
@@ -19,6 +18,7 @@ var boutiqueRouter = require('./routes/Boutique');
 var authRouter = require('./routes/auth');
 var typePaiementRouter = require('./routes/TypePaiement');
 var commandeRouter = require('./routes/Commande');
+var ProduitRouter = require('./routes/Produit');
 
 var app = express();
 
@@ -40,8 +40,9 @@ app.use('/role', roleRouter);
 app.use('/boutique', boutiqueRouter);
 app.use('/type-paiement', typePaiementRouter);
 app.use('/commande', commandeRouter);
-
+app.use('/produit', ProduitRouter);
 app.use('/auth', authRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

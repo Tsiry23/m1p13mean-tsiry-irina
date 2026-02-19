@@ -8,12 +8,8 @@ const ProduitSchema = new mongoose.Schema(
       maxlength: 50,
     },
     image: {
-      type: Buffer,
-      required: false,
-    },
-    nom: {
       type: String,
-      required: false
+      required: false,
     },
     qt_actuel: {
       type: Number,
