@@ -79,7 +79,7 @@
           <tbody>
             <tr *ngFor="let p of produits">
               <td>
-                <img *ngIf="p.image" [src]="p.image" alt="{{p.nom}}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;">
+                <img *ngIf="p.image" [src]="apiUrl + p.image" alt="{{p.nom}}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;">
                 <span *ngIf="!p.image" class="text-muted">—</span>
               </td>
               <td>{{ p.nom }}</td>

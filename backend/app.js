@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require("cors");
-
 require('dotenv').config();
 
 const mongoose = require('mongoose');
@@ -38,8 +37,8 @@ app.use('/utilisateur', UtilisateurRouter);
 app.use('/role', RoleRouter);
 app.use('/boutique', BoutiqueRouter);
 app.use('/produit', ProduitRouter);
-
 app.use('/auth', authRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

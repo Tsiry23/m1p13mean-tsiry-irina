@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
 import { Produit } from '../../models/produit.model';
-import { ProduitService } from '../../services/produit/produit';  // ← nouveau
+import { ProduitService } from '../../services/produit/produit';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-produit',
@@ -17,6 +19,7 @@ export class ProduitComponent implements OnInit {
   produits: Produit[] = [];
   showForm = false;
   isEditing = false;
+  apiUrl = `${environment.apiBaseUrl}`;
   
   currentProduit: Produit = {
     nom: '',
@@ -98,7 +101,7 @@ export class ProduitComponent implements OnInit {
         });
     } else {
       // Création
-      this.produits.push(this.currentProduit)
+      // this.produits.push(this.currentProduit)
       this.produitService.addProduit(this.currentProduit, this.selectedFile)
         .subscribe({
           next: () => {
@@ -111,6 +114,7 @@ export class ProduitComponent implements OnInit {
             alert('Erreur lors de l\'ajout');
           }
         });
+        this.produits = this.produits;
     }
   }
 
