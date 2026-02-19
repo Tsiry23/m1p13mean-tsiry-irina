@@ -13,15 +13,12 @@ router.post('/login', async (req, res) => {
     console.log({ email, mdp });
     
     const user = await Utilisateur.findOne({ email }).select('+mdp').populate('id_role', 'nom');
-    console.log("HEY YOU 1");
     
     if (!user) {
       return res.status(401).json({ message: "Email invalide" });
     }
-    console.log("HEY YOU 2");
     
     const isMatch = await bcrypt.compare(mdp, user.mdp);
-    console.log("HEY YOU 3");
     
     if (!isMatch) {
       return res.status(401).json({ message: "Mot de passe invalide" });

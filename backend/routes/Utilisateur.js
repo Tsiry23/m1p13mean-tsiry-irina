@@ -3,11 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const Utilisateur = require('../models/Utilisateur');
 const Role = require('../models/Role');
+const Boutique = require('../models/Boutique');
 
 router.get('/init', async (req, res) => {
   try {
 
-    // récupérer les rôles
     const roleAdminCC = await Role.findOne({ nom: "admin du centre commercial" });
     const roleAdminBoutique = await Role.findOne({ nom: "admin de boutique" });
     const roleClient = await Role.findOne({ nom: "client" });
@@ -19,60 +19,95 @@ router.get('/init', async (req, res) => {
       });
     }
 
-    const usersAcreer = [
-      {
-        nom: "Admin",
-        prenom: "Centre",
-        email: "m1p13meantsiryirina.admin@gmail.com",
-        mdp: "admin123",
-        role: roleAdminCC._id
-      },
-      {
-        nom: "Admin",
-        prenom: "Boutique",
-        email: "m1p13meantsiryirina.admin.boutique@gmail.com",
-        mdp: "adminboutique123",
-        role: roleAdminBoutique._id
-      },
-      {
-        nom: "Client",
-        prenom: "One",
-        email: "m1p13meantsiryirina.client1@gmail.com",
-        mdp: "client123",
-        role: roleClient._id
-      }
-    ];
-
     const crees = [];
     const existants = [];
 
-    for (const user of usersAcreer) {
+    // =========================
+    // 1️⃣ ADMIN CENTRE
+    // =========================
+    const adminCentreEmail = "m1p13meantsiryirina.admin@gmail.com";
 
-      const deja = await Utilisateur.findOne({ email: user.email });
+    const adminCentreExiste = await Utilisateur.findOne({ email: adminCentreEmail });
 
-      if (deja) {
-        existants.push(user.email);
-        continue;
-      }
+    if (!adminCentreExiste) {
+      const hash = await bcrypt.hash("admin123", 10);
 
-      const hash = await bcrypt.hash(user.mdp, 10);
-
-      const newUser = new Utilisateur({
-        nom: user.nom,
-        prenom: user.prenom,
-        email: user.email,
+      await Utilisateur.create({
+        nom: "Admin",
+        prenom: "Centre",
+        email: adminCentreEmail,
         mdp: hash,
-        id_role: user.role
+        id_role: roleAdminCC._id
       });
 
-      await newUser.save();
-      crees.push(user.email);
+      crees.push(adminCentreEmail);
+    } else {
+      existants.push(adminCentreEmail);
+    }
+
+    // =========================
+    // 2️⃣ CLIENT
+    // =========================
+    const clientEmail = "m1p13meantsiryirina.client1@gmail.com";
+
+    const clientExiste = await Utilisateur.findOne({ email: clientEmail });
+
+    if (!clientExiste) {
+      const hash = await bcrypt.hash("client123", 10);
+
+      await Utilisateur.create({
+        nom: "Client",
+        prenom: "One",
+        email: clientEmail,
+        mdp: hash,
+        id_role: roleClient._id
+      });
+
+      crees.push(clientEmail);
+    } else {
+      existants.push(clientEmail);
+    }
+
+    // =========================
+    // 3️⃣ ADMIN PAR BOUTIQUE
+    // =========================
+    const boutiques = await Boutique.find();
+
+    let index = 1;
+
+    for (const boutique of boutiques) {
+
+      const email = `m1p13meantsiryirina.admin.boutique${index}@gmail.com`;
+
+      const existe = await Utilisateur.findOne({ email });
+
+      if (!existe) {
+
+        const hash = await bcrypt.hash("adminboutique123", 10);
+
+        await Utilisateur.create({
+          nom: "Admin",
+          prenom: boutique.nom,
+          email: email,
+          mdp: hash,
+          id_role: roleAdminBoutique._id,
+          id_boutique: boutique._id
+        });
+
+        crees.push(email);
+
+      } else {
+        existants.push(email);
+      }
+
+      index++;
     }
 
     res.json({
       success: true,
       crees,
-      existants
+      existants,
+      totalBoutiques: boutiques.length
     });
 
   } catch (err) {
@@ -83,6 +118,7 @@ router.get('/init', async (req, res) => {
     });
   }
 });
+
 
 // -----------------------------------------------------------------------------
 // GET /utilisateurs

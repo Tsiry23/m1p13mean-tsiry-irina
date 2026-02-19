@@ -25,8 +25,6 @@ router.get("/", async (req, res) => {
 
 router.get("/init", async (req, res) => {
 
-  console.log("TAFIDITRA");
-
   try {
     let boutiques = [];
   
