@@ -208,7 +208,7 @@
   #sidebar {
     top: 10px;
     left: 10px;
-    transform: translateX(-110%);
+    /* transform: translateX(-110%); */
     height: 90%;
   }
 

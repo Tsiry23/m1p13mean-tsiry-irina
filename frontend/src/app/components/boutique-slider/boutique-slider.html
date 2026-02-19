@@ -1,33 +1,19 @@
-<div id="boutiqueCarousel"
-     class="carousel slide"
-     data-bs-ride="carousel"
-     data-bs-interval="3000"
-     data-bs-pause="false">
+<section id="boutiques" class="container my-5">
+  <h2 class="text-center mb-4">Nos Boutiques</h2>
 
-  <div class="carousel-inner">
-
+  <div class="boutique-scroll d-flex overflow-auto">
     <div
-      class="carousel-item"
-      *ngFor="let boutique of boutiques; let i = index"
-      [class.active]="i === 0"
+      class="boutique-card me-3"
+      *ngFor="let boutique of boutiques"
     >
-      <div class="d-flex justify-content-center">
-        <div class="card boutique-card">
-          <img
-            [src]="'/img/' + boutique.image"
-            class="card-img-top"
-            [alt]="boutique.nom"
-          >
-
-          <div class="card-body">
-            <h5 class="card-title">{{ boutique.nom }}</h5>
-            <p class="card-text">
-              {{ boutique.description }}
-            </p>
-          </div>
-        </div>
+      <img
+        [src]="'/img/' + boutique.image"
+        [alt]="boutique.nom"
+      >
+      <div class="card-body">
+        <h5 class="card-title">{{ boutique.nom }}</h5>
+        <p class="card-text">{{ boutique.description }}</p>
       </div>
     </div>
-
   </div>
-</div>
+</section>

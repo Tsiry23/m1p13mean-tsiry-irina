@@ -43,13 +43,6 @@ export class ProduitService {
 
   }
 
-  deleteProduit(id: string): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers }).pipe(
-      catchError(this.handleError<any>('deleteProduit'))
-    );
-  }
-
   private createFormData(produit: Produit, file?: File): FormData {
     const formData = new FormData();
     formData.append('nom', produit.nom || '');

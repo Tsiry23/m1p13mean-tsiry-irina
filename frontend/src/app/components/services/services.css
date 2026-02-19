@@ -4,6 +4,7 @@
   border: none;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  height: 100%; /* pour que toutes les cartes d'une ligne aient la même hauteur */
 }
 
 .service-card:hover {
@@ -21,6 +22,7 @@
   transform: rotate(20deg) scale(1.2);
 }
 
+/* Titre et texte */
 .service-card h5 {
   margin-top: 15px;
   font-weight: bold;
@@ -29,4 +31,14 @@
 .service-card p {
   font-size: 0.9rem;
   color: #555;
+}
+
+/* Ajustement pour mobile */
+@media (max-width: 767.98px) {
+  .service-card {
+    margin: 0 auto; /* centrage horizontal si nécessaire */
+  }
+  .service-icon {
+    font-size: 2.5rem; /* réduire légèrement l’icône sur mobile */
+  }
 }

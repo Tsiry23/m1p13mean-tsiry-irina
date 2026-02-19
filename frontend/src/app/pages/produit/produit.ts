@@ -117,20 +117,4 @@ export class ProduitComponent implements OnInit {
         this.produits = this.produits;
     }
   }
-
-  deleteProduit(id: string | undefined) {
-    if (!id) return;
-    if (!confirm('Vraiment supprimer ce produit ?')) return;
-
-    this.produitService.deleteProduit(id).subscribe({
-      next: () => {
-        this.loadProduits();
-        alert('Produit supprimé');
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Erreur suppression');
-      }
-    });
-  }
 }
