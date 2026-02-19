@@ -37,6 +37,7 @@ export class Login {
 
         console.log("ça fonctionne");
         // this.router.navigate(['/dashboard']); // adapte si besoin
+        this.router.navigate(['/admin-home']);
       },
       error: (err) => {
         this.loading = false;

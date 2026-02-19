@@ -1,0 +1,108 @@
+<div class="layout" id="container">
+  <app-sidebar></app-sidebar>
+
+  <main class="content p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0">Gestion des Produits</h1>
+      <button class="btn btn-primary" (click)="openAddForm()">
+        <i class="bi bi-plus-lg"></i> Ajouter un produit
+      </button>
+    </div>
+
+    <!-- Formulaire d'ajout / modification -->
+    <div class="card mb-4" *ngIf="showForm">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">{{ isEditing ? 'Modifier le produit' : 'Nouveau produit' }}</h5>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="saveProduit()" #produitForm="ngForm">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label class="form-label">Nom du produit *</label>
+                <input type="text" class="form-control" [(ngModel)]="currentProduit.nom" name="nom" required>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Quantité actuelle</label>
+                  <input type="number" class="form-control" [(ngModel)]="currentProduit.qt_actuel" name="qt_actuel" min="0">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">En cours de commande</label>
+                  <input type="number" class="form-control" [(ngModel)]="currentProduit.qt_en_cours_commande" name="qt_en_cours" min="0">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Prix actuel (Ar)</label>
+                <input type="number" step="100" class="form-control" [(ngModel)]="currentProduit.prix_actuel" name="prix_actuel" min="0">
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Image du produit</label>
+              <div class="text-center mb-3">
+                <img *ngIf="previewUrl" [src]="previewUrl" alt="Aperçu" class="img-fluid rounded" style="max-height: 220px; object-fit: contain;">
+                <div *ngIf="!previewUrl" class="border rounded d-flex align-items-center justify-content-center bg-light" style="height: 220px;">
+                  <span class="text-muted">Aucune image</span>
+                </div>
+              </div>
+              <input type="file" class="form-control" accept="image/*" (change)="onFileSelected($event)">
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-success">
+              {{ isEditing ? 'Enregistrer les modifications' : 'Ajouter le produit' }}
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="closeForm()">Annuler</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Liste des produits -->
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Image</th>
+              <th>Nom</th>
+              <th>Qté Actuelle</th>
+              <th>En commande</th>
+              <th>Prix</th>
+              <th style="width: 140px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of produits">
+              <td>
+                <img *ngIf="p.image" [src]="p.image" alt="{{p.nom}}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;">
+                <span *ngIf="!p.image" class="text-muted">—</span>
+              </td>
+              <td>{{ p.nom }}</td>
+              <td>{{ p.qt_actuel }}</td>
+              <td>{{ p.qt_en_cours_commande }}</td>
+              <td>{{ p.prix_actuel | number:'1.0-0' }} Ar</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditForm(p)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteProduit(p._id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="produits.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                Aucun produit pour le moment
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
