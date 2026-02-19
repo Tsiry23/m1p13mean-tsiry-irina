@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const VenteSchema = new mongoose.Schema(
   {
-    date_: {
+    date: {
       type: Date,
       required: true,
     },
@@ -18,6 +18,11 @@ const VenteSchema = new mongoose.Schema(
     id_client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Utilisateur",
+      required: true,
+    },
+    id_type_paiement: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TypePaiement",
       required: true,
     },
   },

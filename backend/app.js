@@ -13,10 +13,12 @@ mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB connectÃ
  .catch(err => console.log(err));
 
 var indexRouter = require('./routes/index');
-var UtilisateurRouter = require('./routes/Utilisateur');
-var RoleRouter = require('./routes/Role');
-var BoutiqueRouter = require('./routes/Boutique');
+var utilisateurRouter = require('./routes/Utilisateur');
+var roleRouter = require('./routes/Role');
+var boutiqueRouter = require('./routes/Boutique');
 var authRouter = require('./routes/auth');
+var typePaiementRouter = require('./routes/TypePaiement');
+var commandeRouter = require('./routes/Commande');
 
 var app = express();
 
@@ -33,9 +35,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/utilisateur', UtilisateurRouter);
-app.use('/role', RoleRouter);
-app.use('/boutique', BoutiqueRouter);
+app.use('/utilisateur', utilisateurRouter);
+app.use('/role', roleRouter);
+app.use('/boutique', boutiqueRouter);
+app.use('/type-paiement', typePaiementRouter);
+app.use('/commande', commandeRouter);
 
 app.use('/auth', authRouter);
 
