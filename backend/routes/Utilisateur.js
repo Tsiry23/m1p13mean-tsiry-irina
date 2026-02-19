@@ -2,6 +2,87 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const Utilisateur = require('../models/Utilisateur');
+const Role = require('../models/Role');
+
+router.get('/init', async (req, res) => {
+  try {
+
+    // récupérer les rôles
+    const roleAdminCC = await Role.findOne({ nom: "admin du centre commercial" });
+    const roleAdminBoutique = await Role.findOne({ nom: "admin de boutique" });
+    const roleClient = await Role.findOne({ nom: "client" });
+
+    if (!roleAdminCC || !roleAdminBoutique || !roleClient) {
+      return res.status(400).json({
+        success: false,
+        message: "Les rôles doivent être initialisés avant"
+      });
+    }
+
+    const usersAcreer = [
+      {
+        nom: "Admin",
+        prenom: "Centre",
+        email: "m1p13meantsiryirina.admin@gmail.com",
+        mdp: "admin123",
+        role: roleAdminCC._id
+      },
+      {
+        nom: "Admin",
+        prenom: "Boutique",
+        email: "m1p13meantsiryirina.admin.boutique@gmail.com",
+        mdp: "adminboutique123",
+        role: roleAdminBoutique._id
+      },
+      {
+        nom: "Client",
+        prenom: "One",
+        email: "m1p13meantsiryirina.client1@gmail.com",
+        mdp: "client123",
+        role: roleClient._id
+      }
+    ];
+
+    const crees = [];
+    const existants = [];
+
+    for (const user of usersAcreer) {
+
+      const deja = await Utilisateur.findOne({ email: user.email });
+
+      if (deja) {
+        existants.push(user.email);
+        continue;
+      }
+
+      const hash = await bcrypt.hash(user.mdp, 10);
+
+      const newUser = new Utilisateur({
+        nom: user.nom,
+        prenom: user.prenom,
+        email: user.email,
+        mdp: hash,
+        id_role: user.role
+      });
+
+      await newUser.save();
+      crees.push(user.email);
+    }
+
+    res.json({
+      success: true,
+      crees,
+      existants
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Erreur init users"
+    });
+  }
+});
 
 // -----------------------------------------------------------------------------
 // GET /utilisateurs
