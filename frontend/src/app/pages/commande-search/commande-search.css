@@ -1,0 +1,17 @@
+.content h1 {
+  color: var(--main-color);
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.statut-CONFIRMEE { background: #90e0ef; }
+.statut-PREPARATION { background: #48cae4; color: #fff; }
+.statut-RECUPEREE { background: #2ec4b6; color: #fff; }
+.statut-REJETEE { background: #e63946; color: #fff; }
+.statut-ANNULEE { background: #adb5bd; }
+.statut-REMBOURSEE { background: #ffd166; }
+.statut-EN_ATTENTE { background: #dee2e6; }

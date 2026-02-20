@@ -1,0 +1,48 @@
+<div class="layout" id="container">
+  <app-sidebar></app-sidebar>
+
+  <main class="content">
+    <h1>Recherche des commandes</h1>
+
+    <table class="table table-striped mt-4">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Total</th>
+          <th>Client</th>
+          <th>Date récupération prévue</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- Cas : données présentes -->
+        <tr *ngFor="let c of commandes">
+          <td>{{ c.date | date:'dd/MM/yyyy' }}</td>
+          <td>{{ c.total ?? '-' }} Ar</td>
+          <td>{{ c.id_client.nom }} {{ c.id_client.prenom }}</td>
+          <td>{{ c.date_recuperation_prevue | date:'dd/MM/yyyy' }}</td>
+          <td>
+            <span class="badge" [ngClass]="'statut-' + c.statut">
+              {{ c.statut }}
+            </span>
+          </td>
+        </tr>
+
+        <!-- Cas : aucune donnée -->
+        <tr *ngIf="!loading && commandes.length === 0">
+          <td colspan="5" class="text-center text-muted py-4">
+            Aucune commande trouvée
+          </td>
+        </tr>
+
+        <!-- Cas : chargement -->
+        <tr *ngIf="loading">
+          <td colspan="5" class="text-center py-4">
+            Chargement des données...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</div>
