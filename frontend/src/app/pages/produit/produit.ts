@@ -37,14 +37,13 @@ export class ProduitComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProduits();
-    this.produits = this.produits;
   }
 
   loadProduits() {
     this.produitService.getProduits().subscribe({
       next: (data) => {
         this.produits = [...data];
-         this.cdr.detectChanges(); // 👈 test
+         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
@@ -57,6 +56,7 @@ export class ProduitComponent implements OnInit {
     this.isEditing = false;
     this.resetForm();
     this.showForm = true;
+    this.cdr.detectChanges();
   }
 
   openEditForm(produit: Produit) {
@@ -67,15 +67,18 @@ export class ProduitComponent implements OnInit {
     this.previewUrl = produit.image || null;
     this.selectedFile = undefined;
     this.showForm = true;
+    this.cdr.detectChanges();
   }
 
   openEntreeForm(produit: Produit) {
     this.openEditForm(produit);
+    this.cdr.detectChanges();
   }
 
   closeForm() {
     this.showForm = false;
     this.resetForm();
+    this.cdr.detectChanges();
   }
 
   private resetForm() {
@@ -90,6 +93,7 @@ export class ProduitComponent implements OnInit {
     this.quantiteAjout = 0;
     this.selectedFile = undefined;
     this.previewUrl = null;
+    this.cdr.detectChanges();
   }
 
   onFileSelected(event: any) {
@@ -100,6 +104,7 @@ export class ProduitComponent implements OnInit {
       reader.onload = () => this.previewUrl = reader.result as string;
       reader.readAsDataURL(file);
     }
+    this.cdr.detectChanges();
   }
 
   get isEntreeMode(): boolean {
@@ -153,6 +158,7 @@ export class ProduitComponent implements OnInit {
           }
         });
     }
+    this.cdr.detectChanges();
   }
 
   declareEntreeStock() {
@@ -178,5 +184,6 @@ export class ProduitComponent implements OnInit {
           alert('Erreur lors de l\'enregistrement de l\'entrée');
         }
       });
+    this.cdr.detectChanges();
   }
 }

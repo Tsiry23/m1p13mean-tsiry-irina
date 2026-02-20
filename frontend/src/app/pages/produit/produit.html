@@ -114,9 +114,6 @@
               <td>{{ p.qt_en_cours_commande }}</td>
               <td>{{ p.prix_actuel | number:'1.0-0' }} Ar</td>
               <td>
-                <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditForm(p)" title="Modifier produit">
-                  <i class="bi bi-pencil"></i>
-                </button>
                 <button class="btn btn-sm btn-outline-success" (click)="openEntreeForm(p)" title="Déclarer entrée">
                   <i class="bi bi-box-arrow-in-right"></i>
                 </button>
