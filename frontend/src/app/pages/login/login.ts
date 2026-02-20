@@ -36,7 +36,7 @@ export class Login {
     this.auth.login(this.email, this.mdp).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/admin-home']);
+        this.router.navigate(['/admin-boutique']);
       },
       error: (err) => {
         this.loading = false;

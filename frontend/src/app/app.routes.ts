@@ -14,8 +14,8 @@ export const routes: Routes = [
   { path: 'login/mall', component: Login },
   { path: 'dashboard', component: Dashboard },
   { path: 'mall-admin-home', component: MallAdminHome },
-  { path: 'admin-home', component: HomeComponent },
-  { path: 'commande-search', component: CommandeSearch },
-  { path: 'admin-home/produit', component: ProduitComponent },
+  { path: 'admin-boutique', component: HomeComponent },
+  { path: 'admin-boutique/commande-search', component: CommandeSearch },
+  { path: 'admin-boutique/produit', component: ProduitComponent },
   { path: 'produits', component: ListProduits }
 ];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ProduitService } from '../../services/produit/produit'
 import { ProduitsParBoutique } from '../../models/produits-par-boutique.model';
 import { DecimalPipe, CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ export class ListProduits implements OnInit {
   loading = true;
   error = '';
 
-  constructor(private produitService: ProduitService) {}
+  constructor(private produitService: ProduitService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadProduits();
@@ -29,6 +29,8 @@ export class ListProduits implements OnInit {
       next: (data) => {
         this.produitsGroupes = data;
         this.loading = false;
+
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = err.message;
