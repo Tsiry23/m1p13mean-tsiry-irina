@@ -1,0 +1,13 @@
+Je vais avoir besoin que tu m'aides à élaborer une page pour afficher la liste des produits des boutiques dans mon application Angular :
+
+ça c'est la page d'accueil :
+
+<app-navbar></app-navbar>
+<app-hero></app-hero>
+<app-services></app-services>
+<app-boutique-slider></app-boutique-slider>
+<app-contact></app-contact>
+<app-footer></app-footer>
+
+Il y a juste à garder la navbar et le footer. On mettra le contenu principal au centre. 
+

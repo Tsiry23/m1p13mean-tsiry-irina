@@ -47,6 +47,11 @@ const CommandeSchema = new mongoose.Schema(
       default: null,
     },
 
+    id_boutique: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Boutique'
+    },
+    
     id_client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Utilisateur",

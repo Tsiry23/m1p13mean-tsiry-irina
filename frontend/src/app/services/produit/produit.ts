@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Produit } from '../../models/produit.model';
+import { ProduitsParBoutique } from '../../models/produits-par-boutique.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,14 @@ export class ProduitService {
   private apiUrl = `${environment.apiBaseUrl}/produit`;
 
   constructor(private http: HttpClient) {}
+
+  /** Récupère la liste de tous les produits groupés  */
+  getProduitsGroupByBoutique(): Observable<ProduitsParBoutique[]> {
+    return this.http.get<ProduitsParBoutique[]>(this.apiUrl+'/group-by-boutique').pipe(
+      tap(() => console.log('Produits chargés')),
+      catchError(this.handleError<ProduitsParBoutique[]>('getProduitsGroupByBoutique', []))
+    );
+  }
 
   /** Récupère la liste de tous les produits */
   getProduits(): Observable<Produit[]> {

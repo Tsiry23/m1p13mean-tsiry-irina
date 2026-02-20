@@ -45,6 +45,7 @@
 .navbar .navbar-brand {
   color: white;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .navbar.scrolled .navbar-brand {

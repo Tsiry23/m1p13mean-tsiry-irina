@@ -79,6 +79,62 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/group-by-boutique", async (req, res) => {
+  try {
+    const produitsParBoutique = await Produit.aggregate([
+      // Jointure avec la collection boutiques
+      {
+        $lookup: {
+          from: "boutiques",               // nom de la collection MongoDB
+          localField: "id_boutique",
+          foreignField: "_id",
+          as: "boutique"
+        }
+      },
+
+      // Déplier le tableau boutique
+      {
+        $unwind: "$boutique"
+      },
+
+      // Regroupement par boutique
+      {
+        $group: {
+          _id: "$boutique._id",
+          boutique: {
+            $first: {
+              _id: "$boutique._id",
+              nom: "$boutique.nom"
+            }
+          },
+          produits: {
+            $push: {
+              _id: "$_id",
+              nom: "$nom",
+              image: "$image",
+              qt_actuel: "$qt_actuel",
+              qt_en_cours_commande: "$qt_en_cours_commande",
+              prix_actuel: "$prix_actuel",
+              createdAt: "$createdAt"
+            }
+          }
+        }
+      },
+
+      // Optionnel : tri par nom de boutique
+      {
+        $sort: {
+          "boutique.nom": 1
+        }
+      }
+    ]);
+
+    res.json(produitsParBoutique);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Lire un produit par ID
 router.get("/:id", async (req, res) => {
   try {

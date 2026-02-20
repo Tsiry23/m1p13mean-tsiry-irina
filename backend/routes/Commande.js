@@ -3,8 +3,10 @@ const router = express.Router();
 const Commande = require("../models/Commande");
 const DetailVente = require("../models/DetailVente");
 
+const authMiddleware = require("../middleware/auth");
+
 // Créer une commande
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
     const commande = new Commande(req.body);
     await commande.save();
@@ -15,7 +17,7 @@ router.post("/", async (req, res) => {
 });
 
 // Lire toutes les commandes
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   try {
     const commandes = await Commande.find();
     res.json(commandes);
@@ -35,7 +37,7 @@ function computeStatut(commande) {
 }
 
 // 🔎 Rechercher des commandes
-router.post("/search", async (req, res) => {
+router.post("/search", authMiddleware, async (req, res) => {
   try {
     const {
       client,
@@ -50,6 +52,13 @@ router.post("/search", async (req, res) => {
     } = req.query;
 
     const commandeFilter = {};
+
+    /* ===========================
+       BOUTIQUE DE L'UTILISATEUR CONNECTE
+    ============================ */
+    if (req.user.id_boutique) {
+      commandeFilter.id_boutique = new mongoose.Types.ObjectId(req.user.id_boutique);
+    }
 
     /* ===========================
        CLIENT
@@ -176,7 +185,7 @@ router.post("/search", async (req, res) => {
 });
 
 // Lire une commande par ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const commande = await Commande.findById(req.params.id);
     if (!commande) {
@@ -189,7 +198,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Mettre à jour une commande
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const commande = await Commande.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -204,7 +213,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Supprimer une commande
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const commande = await Commande.findByIdAndDelete(req.params.id);
     if (!commande) {

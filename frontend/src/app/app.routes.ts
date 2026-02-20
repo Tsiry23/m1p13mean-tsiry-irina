@@ -5,6 +5,7 @@ import { Home } from './pages/home/home';
 import { HomeComponent } from './pages/admin-home/admin-home';
 import { CommandeSearch } from './pages/commande-search/commande-search';
 import { ProduitComponent } from './pages/produit/produit';
+import { ListProduits } from './pages/list-produits/list-produits';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard },
   { path: 'admin-home', component: HomeComponent },
   { path: 'commande-search', component: CommandeSearch },
-  { path: 'admin-home/produit', component: ProduitComponent }
+  { path: 'admin-home/produit', component: ProduitComponent },
+  { path: 'produits', component: ListProduits }
 ];
