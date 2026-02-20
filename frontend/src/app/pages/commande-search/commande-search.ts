@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
 import { CommandeService } from '../../services/commande/commande';
@@ -16,7 +16,7 @@ export class CommandeSearch implements OnInit {
   commandes: Commande[] = [];
   loading = false;
 
-  constructor(private commandeService: CommandeService) {}
+  constructor(private commandeService: CommandeService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.search();
@@ -29,6 +29,8 @@ export class CommandeSearch implements OnInit {
       next: res => {
         this.commandes = res;
         this.loading = false;
+
+        this.cdr.detectChanges();
       },
       error: () => {
         this.loading = false;

@@ -1,34 +1,39 @@
-<div class="login-container container d-flex justify-content-center align-items-center min-vh-100" id="container">
-
-  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
-
+<div
+  class="login-container container d-flex justify-content-center align-items-center min-vh-100"
+  id="container"
+>
+  <div class="card shadow p-4" style="width: 100%; max-width: 420px">
     <h1 class="text-center mb-4">Connexion</h1>
 
     <form (ngSubmit)="login()" #loginForm="ngForm">
-
       <!-- Email -->
       <div class="mb-3">
         <label class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          name="email"
-          [(ngModel)]="email"
-          required
-          email
-        />
+        <input type="email" class="form-control" name="email" [(ngModel)]="email" required email />
       </div>
 
       <!-- Mot de passe -->
       <div class="mb-3">
         <label class="form-label">Mot de passe</label>
-        <input
-          type="password"
-          class="form-control"
-          name="mdp"
-          [(ngModel)]="mdp"
-          required
-        />
+
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control"
+            name="mdp"
+            [(ngModel)]="mdp"
+            required
+          />
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="togglePassword()"
+            tabindex="-1"
+          >
+            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
       </div>
 
       <!-- Erreur -->
@@ -39,19 +44,13 @@
       }
 
       <!-- Bouton -->
-      <button
-        type="submit"
-        class="btn btn-primary w-100"
-        [disabled]="loading || !loginForm.valid"
-      >
+      <button type="submit" class="btn btn-primary w-100" [disabled]="loading || !loginForm.valid">
         @if (loading) {
           Connexion...
         } @else {
           Se connecter
         }
       </button>
-
     </form>
-
   </div>
 </div>

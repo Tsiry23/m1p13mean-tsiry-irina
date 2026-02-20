@@ -1,0 +1,49 @@
+<nav id="sidebar" [class.active]="isActive">
+  <div class="sidebar-inner">
+
+    <ul class="nav-list">
+
+      <!-- Logo / Toggle -->
+      <li>
+        <a class="nav-link logo-link" (click)="toggleSidebar()">
+          <i class="bi bi-shop nav-icon"></i>
+          <span class="nav-link-text">Mall Manager</span>
+        </a>
+      </li>
+
+      <!-- Dashboard -->
+      <li>
+        <a routerLink="/admin-home/dashboard" class="nav-link">
+          <i class="bi bi-grid-1x2-fill nav-icon"></i>
+          <span class="nav-link-text">Dashboard</span>
+        </a>
+      </li>
+
+      <!-- Boutiques -->
+      <li>
+        <a routerLink="/admin-home/boutiques" class="nav-link">
+          <i class="bi bi-building nav-icon"></i>
+          <span class="nav-link-text">Boutiques</span>
+        </a>
+      </li>
+
+      <!-- Produits -->
+      <li>
+        <a routerLink="/admin-home/produit" class="nav-link">
+          <i class="bi bi-box-seam nav-icon"></i>
+          <span class="nav-link-text">Produits</span>
+        </a>
+      </li>
+
+      <!-- Commandes -->
+      <li>
+        <a routerLink="/admin-home/commandes" class="nav-link">
+          <i class="bi bi-basket nav-icon"></i>
+          <span class="nav-link-text">Commandes</span>
+        </a>
+      </li>
+
+    </ul>
+
+  </div>
+</nav>

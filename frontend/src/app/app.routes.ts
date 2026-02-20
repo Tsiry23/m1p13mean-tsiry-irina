@@ -6,13 +6,16 @@ import { HomeComponent } from './pages/admin-home/admin-home';
 import { CommandeSearch } from './pages/commande-search/commande-search';
 import { ProduitComponent } from './pages/produit/produit';
 import { ListProduits } from './pages/list-produits/list-produits';
+import { MallAdminHome } from './pages/mall-admin-home/mall-admin-home';
 
 export const routes: Routes = [
   { path: '', component: Home },
-  { path: 'login', component: Login },
+  { path: 'login/boutique', component: Login },
+  { path: 'login/mall', component: Login },
   { path: 'dashboard', component: Dashboard },
-  { path: 'admin-home', component: HomeComponent },
-  { path: 'commande-search', component: CommandeSearch },
-  { path: 'admin-home/produit', component: ProduitComponent },
+  { path: 'mall-admin-home', component: MallAdminHome },
+  { path: 'admin-boutique', component: HomeComponent },
+  { path: 'admin-boutique/commande-search', component: CommandeSearch },
+  { path: 'admin-boutique/produit', component: ProduitComponent },
   { path: 'produits', component: ListProduits }
 ];
