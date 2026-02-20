@@ -6,7 +6,6 @@ import { Produit } from '../../models/produit.model';
 import { ProduitService } from '../../services/produit/produit';
 import { environment } from '../../../environments/environment';
 
-
 @Component({
   selector: 'app-produit',
   standalone: true,
@@ -15,18 +14,21 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./produit.css']
 })
 export class ProduitComponent implements OnInit {
-
   produits: Produit[] = [];
   showForm = false;
   isEditing = false;
   apiUrl = `${environment.apiBaseUrl}`;
-  
+
   currentProduit: Produit = {
     nom: '',
+    description: '',
     qt_actuel: 0,
     qt_en_cours_commande: 0,
     prix_actuel: 0
   };
+
+  quantiteAjout: number = 0;
+  originalQtActuel: number | null = null;
 
   selectedFile: File | undefined = undefined;
   previewUrl: string | null = null;
@@ -40,8 +42,8 @@ export class ProduitComponent implements OnInit {
   loadProduits() {
     this.produitService.getProduits().subscribe({
       next: (data) => {
-        this.produits = [...data]
-      } ,
+        this.produits = [...data];
+      },
       error: (err) => {
         console.error(err);
         alert('Impossible de charger les produits');
@@ -58,9 +60,15 @@ export class ProduitComponent implements OnInit {
   openEditForm(produit: Produit) {
     this.isEditing = true;
     this.currentProduit = { ...produit };
+    this.originalQtActuel = produit.qt_actuel;
+    this.quantiteAjout = 0;
     this.previewUrl = produit.image || null;
     this.selectedFile = undefined;
     this.showForm = true;
+  }
+
+  openEntreeForm(produit: Produit) {
+    this.openEditForm(produit);
   }
 
   closeForm() {
@@ -69,7 +77,15 @@ export class ProduitComponent implements OnInit {
   }
 
   private resetForm() {
-    this.currentProduit = { nom: '', qt_actuel: 0, qt_en_cours_commande: 0, prix_actuel: 0 };
+    this.currentProduit = {
+      nom: '',
+      description: '',
+      qt_actuel: 0,
+      qt_en_cours_commande: 0,
+      prix_actuel: 0
+    };
+    this.originalQtActuel = null;
+    this.quantiteAjout = 0;
     this.selectedFile = undefined;
     this.previewUrl = null;
   }
@@ -84,9 +100,31 @@ export class ProduitComponent implements OnInit {
     }
   }
 
+  get isEntreeMode(): boolean {
+    return this.isEditing && this.originalQtActuel !== null;
+  }
+
+  get nouvelleQuantiteCalculee(): number {
+    return (this.originalQtActuel || 0) + (this.quantiteAjout || 0);
+  }
+
+  get formTitle(): string {
+    if (!this.isEditing) return 'Nouveau produit';
+    return this.isEntreeMode ? 'Déclarer entrée de stock' : 'Modifier le produit';
+  }
+
+  get submitButtonText(): string {
+    if (!this.isEditing) return 'Ajouter le produit';
+    return this.isEntreeMode ? "Enregistrer l'entrée" : 'Enregistrer les modifications';
+  }
+
+  get submitButtonClass(): string {
+    if (!this.isEditing) return 'btn-success';
+    return this.isEntreeMode ? 'btn-info' : 'btn-primary';
+  }
+
   saveProduit() {
     if (this.isEditing && this.currentProduit._id) {
-      // Mise à jour
       this.produitService.updateProduit(this.currentProduit._id, this.currentProduit, this.selectedFile)
         .subscribe({
           next: () => {
@@ -100,8 +138,6 @@ export class ProduitComponent implements OnInit {
           }
         });
     } else {
-      // Création
-      // this.produits.push(this.currentProduit)
       this.produitService.addProduit(this.currentProduit, this.selectedFile)
         .subscribe({
           next: () => {
@@ -114,7 +150,31 @@ export class ProduitComponent implements OnInit {
             alert('Erreur lors de l\'ajout');
           }
         });
-        this.produits = this.produits;
     }
+  }
+
+  declareEntreeStock() {
+    if (!this.currentProduit._id) return;
+    if (this.quantiteAjout <= 0) {
+      alert('Veuillez entrer une quantité positive à ajouter');
+      return;
+    }
+
+    const nouvelleQt = this.nouvelleQuantiteCalculee;
+
+    const payload = { qt_actuel: nouvelleQt };
+
+    this.produitService.updateQuantiteActuelle(this.currentProduit._id, payload)
+      .subscribe({
+        next: () => {
+          this.loadProduits();
+          this.closeForm();
+          alert(`Entrée de ${this.quantiteAjout} unités enregistrée. Nouvelle quantité : ${nouvelleQt}`);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Erreur lors de l\'enregistrement de l\'entrée');
+        }
+      });
   }
 }

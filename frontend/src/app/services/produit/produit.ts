@@ -10,7 +10,6 @@ import { ProduitsParBoutique } from '../../models/produits-par-boutique.model';
   providedIn: 'root'
 })
 export class ProduitService {
-
   private apiUrl = `${environment.apiBaseUrl}/produit`;
 
   constructor(private http: HttpClient) {}
@@ -31,34 +30,36 @@ export class ProduitService {
     );
   }
 
-  /** Ajoute un nouveau produit (avec ou sans image) */
   addProduit(produit: Produit, file?: File): Observable<any> {
     const formData = this.createFormData(produit, file);
     const headers = this.getAuthHeaders();
-
     return this.http.post(this.apiUrl, formData, { headers }).pipe(
       catchError(this.handleError<any>('addProduit'))
     );
   }
 
-  /** Met à jour un produit existant */
   updateProduit(id: string, produit: Produit, file?: File): Observable<any> {
     const formData = this.createFormData(produit, file);
     const headers = this.getAuthHeaders();
-
     return this.http.put(`${this.apiUrl}/${id}`, formData, { headers }).pipe(
       catchError(this.handleError<any>('updateProduit'))
     );
+  }
 
+  updateQuantiteActuelle(id: string, data: { qt_actuel: number }): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.put(`${this.apiUrl}/${id}`, data, { headers }).pipe(
+      catchError(this.handleError<any>('updateQuantiteActuelle'))
+    );
   }
 
   private createFormData(produit: Produit, file?: File): FormData {
     const formData = new FormData();
     formData.append('nom', produit.nom || '');
+    formData.append('description', produit.description || '');
     formData.append('qt_actuel', (produit.qt_actuel || 0).toString());
     formData.append('qt_en_cours_commande', (produit.qt_en_cours_commande || 0).toString());
     formData.append('prix_actuel', (produit.prix_actuel || 0).toString());
-
     if (file) {
       formData.append('image', file);
     }
@@ -73,7 +74,6 @@ export class ProduitService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed:`, error);
-      // Tu peux ici ajouter un système de notification global si tu veux
       return throwError(() => new Error(`${operation} a échoué : ${error.message}`));
     };
   }

@@ -7,6 +7,10 @@ const ProduitSchema = new mongoose.Schema(
       required: true,
       maxlength: 50,
     },
+    description: {
+      type: String,
+      required: false,
+    },
     image: {
       type: String,
       required: false,
