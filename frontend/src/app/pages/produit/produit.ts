@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
@@ -33,16 +33,18 @@ export class ProduitComponent implements OnInit {
   selectedFile: File | undefined = undefined;
   previewUrl: string | null = null;
 
-  constructor(private produitService: ProduitService) {}
+  constructor(private produitService: ProduitService,private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadProduits();
+    this.produits = this.produits;
   }
 
   loadProduits() {
     this.produitService.getProduits().subscribe({
       next: (data) => {
         this.produits = [...data];
+         this.cdr.detectChanges(); // 👈 test
       },
       error: (err) => {
         console.error(err);
