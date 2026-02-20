@@ -1,0 +1,183 @@
+<div class="layout" id="container">
+  <app-mall-admin-sidebar></app-mall-admin-sidebar>
+
+  <!-- Modal Paiement -->
+  <div
+    class="modal fade show"
+    tabindex="-1"
+    *ngIf="showPaiementModal"
+    style="display: block; background: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Enregistrer un paiement – {{ selectedBoutique?.nom }}</h5>
+          <button type="button" class="btn-close" (click)="closePaiementModal()"></button>
+        </div>
+
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Montant à payer (Ar)</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="paiement.total_a_payer"
+                name="total_a_payer"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Date et heure</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                [(ngModel)]="paiement.date_"
+                name="date_"
+                required
+              />
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closePaiementModal()">Annuler</button>
+          <button class="btn btn-primary" (click)="addPaiement()" [disabled]="loading">
+            Enregistrer le paiement
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="content p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0">Gestion des Boutiques</h1>
+      <button class="btn btn-primary" (click)="openAddForm()">
+        <i class="bi bi-plus-lg"></i> Ajouter une boutique
+      </button>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="card mb-4" *ngIf="showForm">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Nouvelle boutique</h5>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="saveBoutique()">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label class="form-label">Nom</label>
+                <input class="form-control" [(ngModel)]="currentBoutique.nom" name="nom" required />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea
+                  class="form-control"
+                  rows="3"
+                  [(ngModel)]="currentBoutique.description"
+                  name="description"
+                ></textarea>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Taille (m²)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="currentBoutique.taille_m2"
+                    name="taille_m2"
+                  />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Loyer (Ar)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="currentBoutique.loyer"
+                    name="loyer"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Image</label>
+
+              <div class="mb-3 text-center">
+                <img
+                  *ngIf="previewUrl"
+                  [src]="previewUrl"
+                  class="img-fluid rounded"
+                  style="max-height: 200px"
+                />
+
+                <div
+                  *ngIf="!previewUrl"
+                  class="border rounded bg-light d-flex align-items-center justify-content-center"
+                  style="height: 200px"
+                >
+                  <span class="text-muted">Aucune image</span>
+                </div>
+              </div>
+
+              <input type="file" class="form-control" (change)="onFileSelected($event)" />
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="loading">Enregistrer</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="closeForm()">
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Liste -->
+    <div class="card">
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Image</th>
+              <th>Nom</th>
+              <th>Taille</th>
+              <th>Loyer</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let b of boutiques">
+              <td>
+                <img
+                  *ngIf="b.image"
+                  [src]="'img/' + b.image"
+                  style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px"
+                />
+              </td>
+              <td>{{ b.nom }}</td>
+              <td>{{ b.taille_m2 }} m²</td>
+              <td>{{ b.loyer | number: '1.0-0' }} Ar</td>
+              <td>
+                <button class="btn btn-sm btn-success" (click)="openPaiementModal(b)">
+                  <i class="bi bi-cash-stack"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="boutiques.length === 0">
+              <td colspan="4" class="text-center text-muted py-4">Aucune boutique enregistrée</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Boutique = require("../models/Boutique");
 
+const authMiddleware = require("../middleware/auth");
+
 // Créer une boutique
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
     const boutique = new Boutique(req.body);
     await boutique.save();

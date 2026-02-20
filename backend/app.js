@@ -18,7 +18,8 @@ var boutiqueRouter = require('./routes/Boutique');
 var authRouter = require('./routes/auth');
 var typePaiementRouter = require('./routes/TypePaiement');
 var commandeRouter = require('./routes/Commande');
-var ProduitRouter = require('./routes/Produit');
+var produitRouter = require('./routes/Produit');
+var paiementRouter = require('./routes/Paiement');
 
 var app = express();
 
@@ -40,7 +41,8 @@ app.use('/role', roleRouter);
 app.use('/boutique', boutiqueRouter);
 app.use('/type-paiement', typePaiementRouter);
 app.use('/commande', commandeRouter);
-app.use('/produit', ProduitRouter);
+app.use('/produit', produitRouter);
+app.use('/paiement', paiementRouter);
 app.use('/auth', authRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
