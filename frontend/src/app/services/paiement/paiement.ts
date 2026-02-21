@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Paiement } from '../../models/paiement.model';
 import { environment } from '../../../environments/environment';
+import { PaiementPopulate } from '../../models/paiement-populate.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class PaiementService {
 
   private apiUrl = `${environment.apiBaseUrl}/paiement`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // 🔐 Header avec token
   private getAuthHeaders(): HttpHeaders {
@@ -61,6 +62,36 @@ export class PaiementService {
     return this.http.delete(
       `${this.apiUrl}/${id}`,
       { headers: this.getAuthHeaders() }
+    );
+  }
+
+  // 🔍 Rechercher des paiements avec filtres
+  searchPaiements(filters: {
+    id_boutique?: string;
+    dateDebut?: string;
+    dateFin?: string;
+  }): Observable<PaiementPopulate[]> {
+
+    const params: any = {};
+
+    if (filters.id_boutique) {
+      params.id_boutique = filters.id_boutique;
+    }
+
+    if (filters.dateDebut) {
+      params.dateDebut = filters.dateDebut;
+    }
+
+    if (filters.dateFin) {
+      params.dateFin = filters.dateFin;
+    }
+
+    return this.http.get<PaiementPopulate[]>(
+      `${this.apiUrl}/search`,
+      {
+        headers: this.getAuthHeaders(),
+        params
+      }
     );
   }
 }

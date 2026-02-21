@@ -23,7 +23,7 @@ export class Login {
   constructor(
     private auth: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -33,10 +33,20 @@ export class Login {
     this.errorMessage = '';
     this.loading = true;
 
+    const currentUrl = this.router.url;
+
     this.auth.login(this.email, this.mdp).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/admin-boutique']);
+
+        if (currentUrl.includes('/login/boutique')) {
+          this.router.navigate(['/admin-boutique']);
+        } else if (currentUrl.includes('/login/mall')) {
+          this.router.navigate(['/admin-cc']);
+        } else {
+          // fallback de sécurité
+          this.router.navigate(['/']);
+        }
       },
       error: (err) => {
         this.loading = false;

@@ -8,6 +8,7 @@ import { ProduitComponent } from './pages/produit/produit';
 import { ListProduits } from './pages/list-produits/list-produits';
 import { MallAdminHome } from './pages/mall-admin-home/mall-admin-home';
 import { MallBoutique } from './pages/mall-boutique/mall-boutique';
+import { PaymentHistory } from './pages/payment-history/payment-history';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -19,5 +20,6 @@ export const routes: Routes = [
   { path: 'admin-boutique/produit', component: ProduitComponent },
   { path: 'produits', component: ListProduits },
   { path: 'admin-cc', component: MallAdminHome },
-  { path: 'admin-cc/boutique', component: MallBoutique }
+  { path: 'admin-cc/boutiques', component: MallBoutique },
+  { path: 'admin-cc/paiements', component: PaymentHistory },
 ];

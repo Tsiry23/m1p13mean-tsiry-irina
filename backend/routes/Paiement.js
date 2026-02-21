@@ -29,6 +29,46 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
+// 🔍 Rechercher des paiements (filtres boutique + dates)
+router.get("/search", authMiddleware, async (req, res) => {
+  try {
+    const { id_boutique, dateDebut, dateFin } = req.query;
+
+    const filter = {};
+
+    // 🎯 Filtre par boutique
+    if (id_boutique) {
+      filter.id_boutique = id_boutique;
+    }
+
+    // 📅 Filtre par date
+    if (dateDebut || dateFin) {
+      filter.date_ = {};
+
+      if (dateDebut) {
+        filter.date_.$gte = new Date(dateDebut);
+      }
+
+      if (dateFin) {
+        // inclure toute la journée de fin
+        const endDate = new Date(dateFin);
+        endDate.setHours(23, 59, 59, 999);
+        filter.date_.$lte = endDate;
+      }
+    }
+
+    const paiements = await Paiement
+      .find(filter)
+      .populate("id_boutique")
+      .sort({ date_: -1 }); // plus récents en premier
+
+    res.json(paiements);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // 📄 Lire un paiement par ID
 router.get("/:id", authMiddleware, async (req, res) => {
