@@ -10,11 +10,20 @@ import { ListProduits } from './pages/list-produits/list-produits';
 import { MallAdminHome } from './pages/mall-admin-home/mall-admin-home';
 import { MallBoutique } from './pages/mall-boutique/mall-boutique';
 import { PaymentHistory } from './pages/payment-history/payment-history';
+import { LoginRedirectGuard } from './guards/login-redirect.guard';
 
 export const routes: Routes = [
   { path: '', component: Home },
-  { path: 'login/boutique', component: Login },
-  { path: 'login/mall', component: Login },
+  {
+    path: 'login/boutique',
+    component: Login,
+    canActivate: [LoginRedirectGuard]
+  },
+  {
+    path: 'login/mall',
+    component: Login,
+    canActivate: [LoginRedirectGuard]
+  },
   { path: 'dashboard', component: Dashboard },
   { path: 'admin-boutique', component: HomeComponent },
   { path: 'admin-boutique/commande-search', component: CommandeSearch },

@@ -43,4 +43,33 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/verify-token', (req, res) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Token manquant ou mal formé' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    // Vérifie et décode le token
+    const decoded = jwt.verify(token, SECRET);
+
+    // decoded contient ce que tu as mis dans jwt.sign
+    // ici : { id, role, iat, exp }
+
+    return res.status(200).json({
+      valid: true,
+      role: decoded.role
+    });
+
+  } catch (error) {
+    return res.status(401).json({
+      valid: false,
+      message: 'Token invalide ou expiré'
+    });
+  }
+});
+
 module.exports = router;

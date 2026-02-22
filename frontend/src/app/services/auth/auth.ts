@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, of, map, tap, catchError } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -10,7 +11,7 @@ export class AuthService {
 
   private apiUrl = `${environment.apiBaseUrl}/auth`; // adapte si besoin
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Connexion utilisateur
@@ -28,9 +29,39 @@ export class AuthService {
   }
 
   /**
+ * Vérifie le token et retourne le rôle si valide
+ */
+  getRoleFromToken(): Observable<string | undefined> {
+    const token = this.getToken();
+
+    // Pas de token → pas d'appel API
+    if (!token) {
+      return of(undefined);
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http
+      .get<{ valid: boolean; role: string }>(
+        `${this.apiUrl}/verify-token`,
+        { headers }
+      )
+      .pipe(
+        map((response) => response.role),
+        catchError(() => of(undefined))
+      );
+  }
+
+  /**
    * Récupérer le token
    */
   getToken(): string | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
     return localStorage.getItem('token');
   }
 
