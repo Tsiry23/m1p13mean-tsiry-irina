@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProduitService } from '../../services/produit/produit';
-import { VenteService,EnregistrerResponse } from '../../services/vente/vente';
+import { VenteService, EnregistrerResponse } from '../../services/vente/vente';
 import { Produit } from '../../models/produit.model';
 import { environment } from '../../../environments/environment';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
@@ -69,7 +69,6 @@ export class VenteProduitsComponent implements OnInit {
       next: (types) => {
         this.typesPaiement = types;
         this.paiementLoading = false;
-        // Sélectionner le premier par défaut si liste non vide
         if (types.length > 0) {
           this.selectedTypePaiement = types[0]._id;
         }
@@ -147,31 +146,17 @@ export class VenteProduitsComponent implements OnInit {
       return;
     }
 
-    this.executerTransaction('vente');
+    this.executerTransaction();
   }
 
-  validerCommande(): void {
-    if (this.panierEstVide()) return;
-    if (!this.selectedTypePaiement) {
-      alert('Veuillez sélectionner un moyen de paiement (acompte).');
-      return;
-    }
-
-    if (!confirm(`Confirmer la COMMANDE pour ${this.getTotalPanier().toLocaleString()} Ar ?`)) {
-      return;
-    }
-
-    this.executerTransaction('commande');
-  }
-
-  private executerTransaction(type: 'vente' | 'commande'): void {
+  private executerTransaction(): void {
     this.transactionLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
 
     const payload: EnregistrerVenteCommandeDto = {
-      type,
-      id_client: '',  // ou undefined — backend accepte null maintenant
+      type: 'vente',
+      id_client: '',
       id_type_paiement: this.selectedTypePaiement,
       produits: this.getPanierArray().map(item => ({
         id_produit: item.produit._id,
@@ -180,21 +165,17 @@ export class VenteProduitsComponent implements OnInit {
       }))
     };
 
-    if (type === 'commande') {
-      payload.date_recuperation_prevue = new Date().toISOString().split('T')[0]; // aujourd'hui
-    }
-
     this.venteService.enregistrerVenteOuCommande(payload).subscribe({
       next: (res: EnregistrerResponse) => {
         this.transactionLoading = false;
-        this.successMessage = `${res.message} (Total: ${res.total.toLocaleString()} Ar)`;
+        alert(`${res.message} (Total: ${res.total.toLocaleString()} Ar)`);
         this.viderPanier();
         this.chargerProduits();
         this.cdr.detectChanges();
       },
       error: (err) => {
         this.transactionLoading = false;
-        this.errorMessage = err.message || 'Erreur lors de l\'enregistrement';
+        alert('Erreur lors de l\'enregistrement');
         this.chargerProduits();
         this.cdr.detectChanges();
       }

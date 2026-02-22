@@ -10,7 +10,7 @@ import { TypePaiement } from '../../models/typepaiement.model';
 export interface EnregistrerResponse {
   success: boolean;
   message: string;
-  id?: string;           // id_vente ou id_commande
+  id?: string;
   type: 'vente' | 'commande';
   total: number;
 }

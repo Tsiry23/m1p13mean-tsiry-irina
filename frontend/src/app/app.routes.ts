@@ -13,6 +13,7 @@ import { PaymentHistory } from './pages/payment-history/payment-history';
 
 export const routes: Routes = [
   { path: '', component: Home },
+  { path: 'login', component: Login },
   { path: 'login/boutique', component: Login },
   { path: 'login/mall', component: Login },
   { path: 'dashboard', component: Dashboard },

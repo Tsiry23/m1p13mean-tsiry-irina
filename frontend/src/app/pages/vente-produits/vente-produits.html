@@ -3,7 +3,7 @@
 <div class="page-wrapper ms-sidebar">
   <div class="container-fluid py-4">
 
-    <h2 class="mb-4">Vente & Commande – Produits disponibles</h2>
+    <h2 class="mb-4">Vente Produits</h2>
 
     <!-- Loading / Erreurs globales -->
     <div *ngIf="loading" class="text-center py-5">
@@ -128,17 +128,9 @@
               [disabled]="!peutFaireVente() || !selectedTypePaiement || transactionLoading || paiementLoading"
             >
               <span *ngIf="transactionLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
-              Valider vente
+              Valider la vente
             </button>
 
-            <button
-              class="btn btn-outline-primary btn-lg"
-              (click)="validerCommande()"
-              [disabled]="!selectedTypePaiement || transactionLoading || paiementLoading"
-            >
-              <span *ngIf="transactionLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
-              Valider commande
-            </button>
           </div>
         </div>
 
@@ -151,7 +143,7 @@
         </div>
 
         <div *ngIf="!peutFaireVente() && !errorMessage" class="mt-2 text-danger small">
-          Vente immédiate impossible : stock insuffisant sur un ou plusieurs articles.
+          Vente impossible : stock insuffisant sur un ou plusieurs articles.
         </div>
 
       </div>
