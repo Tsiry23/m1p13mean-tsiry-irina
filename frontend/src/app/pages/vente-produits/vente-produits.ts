@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProduitService } from '../../services/produit/produit'; // adapte le chemin
+import { ProduitService } from '../../services/produit/produit';
+import { VenteService, EnregistrerResponse } from '../../services/vente/vente';
 import { Produit } from '../../models/produit.model';
 import { environment } from '../../../environments/environment';
 import { SidebarComponent } from '../../components/sidebar/sidebar';
-
+import { TypePaiement } from '../../models/typepaiement.model';
+import { EnregistrerVenteCommandeDto } from '../../models/enregistrer-vente-commandeDto.model';
 
 interface PanierItem {
   produit: Produit;
@@ -15,41 +17,67 @@ interface PanierItem {
 @Component({
   selector: 'app-vente-produits',
   standalone: true,
-  imports: [CommonModule, FormsModule,SidebarComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './vente-produits.html',
   styleUrls: ['./vente-produits.css']
 })
 export class VenteProduitsComponent implements OnInit {
 
   produits: Produit[] = [];
-  panier: { [key: string]: PanierItem } = {};   // clé = _id du produit
+  panier: { [key: string]: PanierItem } = {};
+
+  typesPaiement: TypePaiement[] = [];
+  selectedTypePaiement: string = '';
 
   loading = true;
+  paiementLoading = false;
+  transactionLoading = false;
+
   error = '';
+  errorMessage = '';
+  successMessage = '';
 
   constructor(
     private produitService: ProduitService,
+    private venteService: VenteService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-      console.log("Charging");
     this.chargerProduits();
-    this.cdr.detectChanges();
+    this.chargerTypesPaiement();
   }
 
   chargerProduits(): void {
     this.produitService.getProduits().subscribe({
       next: (data) => {
         this.produits = data;
-        console.log("hehe");
         this.loading = false;
-
         this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = err.message || 'Impossible de charger les produits';
         this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  chargerTypesPaiement(): void {
+    this.paiementLoading = true;
+    this.venteService.getTypesPaiement().subscribe({
+      next: (types) => {
+        this.typesPaiement = types;
+        this.paiementLoading = false;
+        if (types.length > 0) {
+          this.selectedTypePaiement = types[0]._id;
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.error = err.message || 'Impossible de charger les moyens de paiement';
+        this.paiementLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -58,7 +86,8 @@ export class VenteProduitsComponent implements OnInit {
     return image ? `${environment.apiBaseUrl}${image}` : '/assets/img/default-product.png';
   }
 
-  // ─── Panier ────────────────────────────────────────
+  // ─── Gestion panier ────────────────────────────────────────
+
   ajouterAuPanier(produit: Produit): void {
     if (this.panier[produit._id]) {
       this.panier[produit._id].quantite += 1;
@@ -96,60 +125,64 @@ export class VenteProduitsComponent implements OnInit {
     return Object.keys(this.panier).length === 0;
   }
 
-  // Vérifie si TOUS les produits du panier ont assez de stock
   peutFaireVente(): boolean {
-    return this.getPanierArray().every(item => {
-      return item.produit.qt_actuel >= item.quantite;
-    });
+    return this.getPanierArray().every(item => item.produit.qt_actuel >= item.quantite);
   }
 
-  // ─── Validation ─────────────────────────────────────
+  // ─── Validation ─────────────────────────────────────────────
+
   validerVente(): void {
     if (this.panierEstVide()) return;
-
+    if (!this.selectedTypePaiement) {
+      alert('Veuillez sélectionner un moyen de paiement.');
+      return;
+    }
     if (!this.peutFaireVente()) {
-      alert("Vente impossible : certains produits n'ont pas assez de stock.");
+      alert('Vente impossible : stock insuffisant sur un ou plusieurs articles.');
       return;
     }
 
-    if (!confirm(`Confirmer la VENTE pour un total de ${this.getTotalPanier()} Ar ?`)) {
+    if (!confirm(`Confirmer la VENTE pour ${this.getTotalPanier().toLocaleString()} Ar ?`)) {
       return;
     }
 
-    this.envoyerTransaction('vente');
-    this.cdr.detectChanges();
+    this.executerTransaction();
   }
 
-  validerCommande(): void {
-    if (this.panierEstVide()) return;
+  private executerTransaction(): void {
+    this.transactionLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
 
-    if (!confirm(`Confirmer la COMMANDE pour un total de ${this.getTotalPanier()} Ar ?`)) {
-      return;
-    }
-
-    this.envoyerTransaction('commande');
-    this.cdr.detectChanges();
-  }
-
-  private envoyerTransaction(type: 'vente' | 'commande'): void {
-    // Préparation du payload attendu par le backend
-    const payload = {
-      type,
-      id_client: 'Divers',   // ← À adapter (modal ? profil ?)
+    const payload: EnregistrerVenteCommandeDto = {
+      type: 'vente',
+      id_client: '',
+      id_type_paiement: this.selectedTypePaiement,
       produits: this.getPanierArray().map(item => ({
         id_produit: item.produit._id,
         qt: item.quantite,
-        prix_vente: item.produit.prix_actuel   // ou prix négocié si tu veux
-      })),
-      // Ajoute selon besoin :
-      // id_type_paiement: ...   (pour vente)
-      // date_recuperation_prevue: ... (pour commande)
+        prix_vente: item.produit.prix_actuel || 0
+      }))
     };
 
-    // À implémenter : appel HTTP vers ton endpoint
-    // ex: this.http.post('/api/ventes/enregistrer', payload).subscribe(...)
-    console.log('Envoi vers backend :', payload);
+    this.venteService.enregistrerVenteOuCommande(payload).subscribe({
+      next: (res: EnregistrerResponse) => {
+        this.transactionLoading = false;
+        alert(`${res.message} (Total: ${res.total.toLocaleString()} Ar)`);
+        this.viderPanier();
+        this.chargerProduits();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.transactionLoading = false;
+        alert('Erreur lors de l\'enregistrement');
+        this.chargerProduits();
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
-    this.cdr.detectChanges();
+  private viderPanier(): void {
+    this.panier = {};
   }
 }

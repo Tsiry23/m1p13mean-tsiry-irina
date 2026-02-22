@@ -32,11 +32,15 @@ router.post('/login', async (req, res) => {
       SECRET,
       { expiresIn: "24h" }
     );
-
-    res.json({
+    let rep = {
       success: true,
       token
-    });
+    };
+
+    if (user.id_role.nom === 'client') {
+      rep.client = token;
+    }
+    res.json(rep);
 
   } catch (err) {
     res.status(500).json({ message: "Erreur login" });

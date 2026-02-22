@@ -18,7 +18,7 @@ const VenteSchema = new mongoose.Schema(
     id_client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Utilisateur",
-      required: true,
+      required: false,
     },
     id_type_paiement: {
       type: mongoose.Schema.Types.ObjectId,

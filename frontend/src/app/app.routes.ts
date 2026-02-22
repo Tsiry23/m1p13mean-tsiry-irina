@@ -24,6 +24,7 @@ export const routes: Routes = [
     component: Login,
     canActivate: [LoginRedirectGuard]
   },
+  { path: 'login', component: Login },
   { path: 'dashboard', component: Dashboard },
   { path: 'admin-boutique', component: HomeComponent },
   { path: 'admin-boutique/commande-search', component: CommandeSearch },

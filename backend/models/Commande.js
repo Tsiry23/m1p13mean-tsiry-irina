@@ -62,6 +62,11 @@ const CommandeSchema = new mongoose.Schema(
       ref: "Utilisateur",
       required: true,
     },
+     id_type_paiement: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "TypePaiement",
+      required: true,
+    },
   },
   {
     timestamps: true,
