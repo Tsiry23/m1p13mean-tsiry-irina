@@ -1,5 +1,5 @@
 export interface Produit {
-  _id?: string;
+  _id: string;
   nom: string;
   description: string;
   qt_actuel: number;

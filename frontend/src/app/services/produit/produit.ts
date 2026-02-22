@@ -24,7 +24,9 @@ export class ProduitService {
 
   /** Récupère la liste de tous les produits */
   getProduits(): Observable<Produit[]> {
-    return this.http.get<Produit[]>(this.apiUrl).pipe(
+    const headers = this.getAuthHeaders();
+    // console.log("headers : " + headers);
+    return this.http.get<Produit[]>(this.apiUrl+"/boutique", { headers }).pipe(
       tap(() => console.log('Produits chargés')),
       catchError(this.handleError<Produit[]>('getProduits', []))
     );
@@ -67,8 +69,14 @@ export class ProduitService {
   }
 
   private getAuthHeaders(): HttpHeaders | undefined {
-    const token = localStorage.getItem('token');
-    return token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const token = window.localStorage.getItem('token');
+    return token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : undefined;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

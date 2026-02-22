@@ -20,6 +20,7 @@ export class ProduitComponent implements OnInit {
   apiUrl = `${environment.apiBaseUrl}`;
 
   currentProduit: Produit = {
+    _id: '',
     nom: '',
     description: '',
     qt_actuel: 0,
@@ -83,6 +84,7 @@ export class ProduitComponent implements OnInit {
 
   private resetForm() {
     this.currentProduit = {
+      _id:'',
       nom: '',
       description: '',
       qt_actuel: 0,
