@@ -5,16 +5,17 @@
 
     <h2 class="mb-4">Vente & Commande – Produits disponibles</h2>
 
-    <!-- Loading / Erreur -->
+    <!-- Loading / Erreurs globales -->
     <div *ngIf="loading" class="text-center py-5">
       <div class="spinner-border text-primary"></div>
+      <p class="mt-2">Chargement des produits...</p>
     </div>
 
-    <div *ngIf="error" class="alert alert-danger">
+    <div *ngIf="error && !loading" class="alert alert-danger">
       {{ error }}
     </div>
 
-    <!-- Liste produits -->
+    <!-- Liste des produits -->
     <div *ngIf="!loading && !error" class="row g-4 mb-5">
       <div class="col-xl-3 col-lg-4 col-md-6" *ngFor="let produit of produits">
         <div class="card h-100 shadow-sm position-relative">
@@ -23,6 +24,7 @@
             [src]="getImageUrl(produit.image)"
             class="card-img-top"
             alt="{{ produit.nom }}"
+            style="height: 180px; object-fit: cover;"
           />
 
           <div class="card-body d-flex flex-column">
@@ -36,15 +38,14 @@
               {{ produit.prix_actuel | number:'1.0-0' }} Ar
             </p>
 
-            <!-- Zone panier / quantité -->
             <div class="mt-auto">
               <ng-container *ngIf="!panier[produit._id]; else controls">
                 <button
                   class="btn btn-outline-success w-100"
                   (click)="ajouterAuPanier(produit)"
-                  [disabled]="produit.qt_actuel < 1"
+                  [disabled]="produit.qt_actuel < 1 || transactionLoading"
                 >
-                  <i class="bi bi-cart-plus"></i> Ajouter au panier
+                  <i class="bi bi-cart-plus"></i> Ajouter
                 </button>
               </ng-container>
 
@@ -53,6 +54,7 @@
                   <button
                     class="btn btn-sm btn-outline-danger"
                     (click)="retirerDuPanier(produit._id)"
+                    [disabled]="transactionLoading"
                   >
                     ×
                   </button>
@@ -65,15 +67,15 @@
                     [(ngModel)]="panier[produit._id].quantite"
                     (ngModelChange)="changerQuantite(produit._id, $event)"
                     style="width: 70px;"
+                    [disabled]="transactionLoading"
                   />
 
-                  <span class="small text-muted">/{{ produit.qt_actuel }}</span>
+                  <span class="small text-muted"> / {{ produit.qt_actuel }}</span>
                 </div>
               </ng-template>
             </div>
           </div>
 
-          <!-- Badge stock faible -->
           <span
             *ngIf="produit.qt_actuel <= 5 && produit.qt_actuel > 0"
             class="position-absolute top-0 end-0 badge bg-warning text-dark m-2"
@@ -91,9 +93,10 @@
       </div>
     </div>
 
-    <!-- Panier récap + boutons validation -->
+    <!-- Panier récap + actions -->
     <div *ngIf="!panierEstVide()" class="card bg-light mt-5 sticky-bottom shadow-lg" style="bottom: 20px; z-index: 1000;">
       <div class="card-body">
+
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
           <div>
             <h5 class="mb-1">Panier : {{ getPanierArray().length }} article(s)</h5>
@@ -102,28 +105,55 @@
             </div>
           </div>
 
-          <div class="d-flex gap-3">
+          <div class="d-flex flex-column flex-sm-row gap-3 align-items-center">
+
+            <!-- Sélection moyen de paiement -->
+            <div class="d-flex align-items-center gap-2">
+              <label class="form-label small fw-bold mb-0">Paiement :</label>
+              <select
+                class="form-select form-select-sm"
+                [(ngModel)]="selectedTypePaiement"
+                [disabled]="paiementLoading || typesPaiement.length === 0 || transactionLoading"
+              >
+                <option value="" disabled>Choisir...</option>
+                <option *ngFor="let t of typesPaiement" [value]="t._id">
+                  {{ t.nom }}
+                </option>
+              </select>
+            </div>
+
             <button
               class="btn btn-success btn-lg"
               (click)="validerVente()"
-              [disabled]="!peutFaireVente()"
-              title="Vente = stock doit être suffisant"
+              [disabled]="!peutFaireVente() || !selectedTypePaiement || transactionLoading || paiementLoading"
             >
-              Valider la vente
+              <span *ngIf="transactionLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Valider vente
             </button>
 
             <button
               class="btn btn-outline-primary btn-lg"
               (click)="validerCommande()"
+              [disabled]="!selectedTypePaiement || transactionLoading || paiementLoading"
             >
-              Valider la commande
+              <span *ngIf="transactionLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Valider commande
             </button>
           </div>
         </div>
 
-        <div *ngIf="!peutFaireVente()" class="mt-2 text-danger small">
-          Vente bloquée : au moins un produit n'a pas assez de stock.
+        <div *ngIf="errorMessage" class="mt-3 alert alert-danger small">
+          {{ errorMessage }}
         </div>
+
+        <div *ngIf="successMessage" class="mt-3 alert alert-success small">
+          {{ successMessage }}
+        </div>
+
+        <div *ngIf="!peutFaireVente() && !errorMessage" class="mt-2 text-danger small">
+          Vente immédiate impossible : stock insuffisant sur un ou plusieurs articles.
+        </div>
+
       </div>
     </div>
 

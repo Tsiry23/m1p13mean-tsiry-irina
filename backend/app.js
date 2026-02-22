@@ -20,6 +20,7 @@ var typePaiementRouter = require('./routes/TypePaiement');
 var commandeRouter = require('./routes/Commande');
 var produitRouter = require('./routes/Produit');
 var paiementRouter = require('./routes/Paiement');
+var venteRouter = require('./routes/Vente');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use('/type-paiement', typePaiementRouter);
 app.use('/commande', commandeRouter);
 app.use('/produit', produitRouter);
 app.use('/paiement', paiementRouter);
+app.use('/vente', venteRouter);
 app.use('/auth', authRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
