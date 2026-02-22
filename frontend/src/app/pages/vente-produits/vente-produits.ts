@@ -44,13 +44,14 @@ export class VenteProduitsComponent implements OnInit {
         this.produits = data;
         console.log("hehe");
         this.loading = false;
+
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.error = err.message || 'Impossible de charger les produits';
         this.loading = false;
       }
     });
-    this.cdr.detectChanges();
   }
 
   getImageUrl(image?: string): string {
