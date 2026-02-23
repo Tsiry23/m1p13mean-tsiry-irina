@@ -24,6 +24,7 @@ export class MallBoutique implements OnInit {
 
   currentBoutique: Boutique = {
     nom: '',
+    nom_emplacement: '',
     description: '',
     taille_m2: 0,
     loyer: 0
@@ -38,7 +39,8 @@ export class MallBoutique implements OnInit {
   paiement: Paiement = {
     total_a_payer: 0,
     date_: '',
-    id_boutique: ''
+    id_boutique: '',
+    periode: ''
   };
 
   constructor(private boutiqueService: BoutiqueService, private paiementService: PaiementService, private cdr: ChangeDetectorRef) { }
@@ -124,7 +126,18 @@ export class MallBoutique implements OnInit {
   }
 
   addPaiement() {
+    if (!this.paiement.periode) {
+      alert('Veuillez sélectionner une période');
+      return;
+    }
+
     this.loading = true;
+
+    // Conversion "YYYY-MM" → Date (1er jour du mois)
+    if (typeof this.paiement.periode === 'string') {
+      const [year, month] = this.paiement.periode.split('-').map(Number);
+      this.paiement.periode = new Date(year, month - 1, 1);
+    }
 
     this.paiementService.addPaiement(this.paiement).subscribe({
       next: () => {

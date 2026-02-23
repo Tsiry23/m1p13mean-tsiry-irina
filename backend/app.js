@@ -21,6 +21,7 @@ var commandeRouter = require('./routes/Commande');
 var produitRouter = require('./routes/Produit');
 var paiementRouter = require('./routes/Paiement');
 var venteRouter = require('./routes/Vente');
+var dashboardRouter = require('./routes/Dashboard');
 
 var app = express();
 
@@ -46,6 +47,7 @@ app.use('/produit', produitRouter);
 app.use('/paiement', paiementRouter);
 app.use('/vente', venteRouter);
 app.use('/auth', authRouter);
+app.use('/dashboard', dashboardRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // catch 404 and forward to error handler

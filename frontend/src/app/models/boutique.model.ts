@@ -2,6 +2,8 @@ export interface Boutique {
   _id?: string;
 
   nom: string;
+  nom_emplacement?: string;
+
   description?: string | null;
 
   taille_m2?: number | null;
@@ -16,11 +18,11 @@ export interface Boutique {
 
   active?: boolean;
 
-  heure_ouverture?: string | null; // "08:00"
-  heure_fermeture?: string | null; // "18:00"
+  heure_ouverture?: string | null;
+  heure_fermeture?: string | null;
 
-  contact?: string[]; // téléphones / responsables
-  mail?: string[];    // emails
+  contact?: string[];
+  mail?: string[];
 
   createdAt?: Date | string;
   updatedAt?: Date | string;

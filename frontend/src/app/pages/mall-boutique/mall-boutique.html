@@ -2,54 +2,71 @@
   <app-mall-admin-sidebar></app-mall-admin-sidebar>
 
   <!-- Modal Paiement -->
-  <div
-    class="modal fade show"
-    tabindex="-1"
-    *ngIf="showPaiementModal"
-    style="display: block; background: rgba(0, 0, 0, 0.5)"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Enregistrer un paiement – {{ selectedBoutique?.nom }}</h5>
-          <button type="button" class="btn-close" (click)="closePaiementModal()"></button>
-        </div>
+  <!-- Modal Paiement -->
+<div
+  class="modal fade show"
+  tabindex="-1"
+  *ngIf="showPaiementModal"
+  style="display: block; background: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Enregistrer un paiement – {{ selectedBoutique?.nom }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closePaiementModal()"></button>
+      </div>
 
-        <div class="modal-body">
-          <form>
-            <div class="mb-3">
-              <label class="form-label">Montant à payer (Ar)</label>
-              <input
-                type="number"
-                class="form-control"
-                [(ngModel)]="paiement.total_a_payer"
-                name="total_a_payer"
-                required
-              />
-            </div>
+      <div class="modal-body">
+        <form>
+          <!-- Montant -->
+          <div class="mb-3">
+            <label class="form-label">Montant à payer (Ar)</label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="paiement.total_a_payer"
+              name="total_a_payer"
+              required
+            />
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Date et heure</label>
-              <input
-                type="datetime-local"
-                class="form-control"
-                [(ngModel)]="paiement.date_"
-                name="date_"
-                required
-              />
-            </div>
-          </form>
-        </div>
+          <!-- Période (mois concerné) -->
+          <div class="mb-3">
+            <label class="form-label">Période (mois concerné)</label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="paiement.periode"
+              name="periode"
+              required
+            />
+          </div>
 
-        <div class="modal-footer">
-          <button class="btn btn-secondary" (click)="closePaiementModal()">Annuler</button>
-          <button class="btn btn-primary" (click)="addPaiement()" [disabled]="loading">
-            Enregistrer le paiement
-          </button>
-        </div>
+          <!-- Date réelle du paiement -->
+          <div class="mb-3">
+            <label class="form-label">Date et heure du paiement</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              [(ngModel)]="paiement.date_"
+              name="date_"
+              required
+            />
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closePaiementModal()">Annuler</button>
+        <button class="btn btn-primary" (click)="addPaiement()" [disabled]="loading">
+          Enregistrer le paiement
+        </button>
       </div>
     </div>
   </div>
+</div>
 
   <main class="content p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
