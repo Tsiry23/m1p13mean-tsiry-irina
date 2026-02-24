@@ -10,7 +10,6 @@ const SECRET = process.env.SUPER_SECRET_KEY;
 router.post('/login', async (req, res) => {
   try {
     const { email, mdp } = req.body;
-    console.log({ email, mdp });
     
     const user = await Utilisateur.findOne({ email }).select('+mdp').populate('id_role', 'nom');
     

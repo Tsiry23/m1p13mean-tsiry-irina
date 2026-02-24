@@ -21,6 +21,9 @@ var commandeRouter = require('./routes/Commande');
 var produitRouter = require('./routes/Produit');
 var paiementRouter = require('./routes/Paiement');
 var venteRouter = require('./routes/Vente');
+var favorisRouter = require('./routes/Favoris');
+var emailRouter = require('./routes/Email');
+var dashboardBoutiqueRouter = require('./routes/dashboardBoutique');
 
 var app = express();
 
@@ -46,6 +49,9 @@ app.use('/produit', produitRouter);
 app.use('/paiement', paiementRouter);
 app.use('/vente', venteRouter);
 app.use('/auth', authRouter);
+app.use('/favoris', favorisRouter);
+app.use('/email', emailRouter);
+app.use('/dashboard-boutique', dashboardBoutiqueRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // catch 404 and forward to error handler

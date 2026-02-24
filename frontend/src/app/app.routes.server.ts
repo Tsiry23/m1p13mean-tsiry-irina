@@ -4,7 +4,7 @@ export const serverRoutes: ServerRoute[] = [
 
   // 🔐 pages authentifiées → PAS de SSR
   {
-    path: 'dashboard',
+    path: 'produits',
     renderMode: RenderMode.Client
   },
   {

@@ -10,16 +10,39 @@ import { ProduitsParBoutique } from '../../models/produits-par-boutique.model';
   providedIn: 'root'
 })
 export class ProduitService {
+
   private apiUrl = `${environment.apiBaseUrl}/produit`;
+
+  private isClient = !!localStorage.getItem('client');
 
   constructor(private http: HttpClient) {}
 
   /** Récupère la liste de tous les produits groupés  */
   getProduitsGroupByBoutique(): Observable<ProduitsParBoutique[]> {
-    return this.http.get<ProduitsParBoutique[]>(this.apiUrl+'/group-by-boutique').pipe(
-      tap(() => console.log('Produits chargés')),
-      catchError(this.handleError<ProduitsParBoutique[]>('getProduitsGroupByBoutique', []))
-    );
+    let rep ;
+    if (!this.isClient) {
+      rep = this.http.get<ProduitsParBoutique[]>(this.apiUrl+'/group-by-boutique').pipe(
+        tap(() => console.log('Produits chargés')),
+        catchError(this.handleError<ProduitsParBoutique[]>('getProduitsGroupByBoutique', []))
+      );
+    }else{
+      const headers = this.getAuthHeaders();
+      rep = this.http.get<ProduitsParBoutique[]>(this.apiUrl+'/group-by-boutique-client', { headers }).pipe(
+        tap(() => console.log('Produits chargés')),
+        catchError(this.handleError<ProduitsParBoutique[]>('getProduitsGroupByBoutique', []))
+      );
+    }
+    return rep;
+  }
+
+  notify (id : string) {
+    const headers = this.getAuthHeaders();
+    console.log("while notifying :" + id);
+    this.http.post(
+          environment.apiBaseUrl + "/email/notify-arrivage",
+          { produitId: id },
+          { headers }
+        ).subscribe(); // ← fire and forget
   }
 
   /** Récupère la liste de tous les produits */
@@ -33,11 +56,23 @@ export class ProduitService {
   }
 
   addProduit(produit: Produit, file?: File): Observable<any> {
+    console.log("adding \n");
     const formData = this.createFormData(produit, file);
     const headers = this.getAuthHeaders();
-    return this.http.post(this.apiUrl, formData, { headers }).pipe(
-      catchError(this.handleError<any>('addProduit'))
-    );
+
+    const ajout$ = this.http.post(this.apiUrl, formData, { headers });
+
+    ajout$.subscribe({
+      next: () => {
+        
+      },
+      error: (err) => {
+        console.error(err);
+        alert("Erreur lors de l'ajout");
+      }
+    });
+
+    return ajout$;   // ← on retourne l'observable original
   }
 
   updateProduit(id: string, produit: Produit, file?: File): Observable<any> {

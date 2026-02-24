@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Produit = require("../models/Produit");
 const Utilisateur = require("../models/Utilisateur");
+const Favoris = require("../models/Favoris");
 const multer = require('multer');
 const path = require('path');
 const authMiddleware = require("../middleware/auth");
@@ -24,7 +25,6 @@ router.post("/", authMiddleware, upload.single('image'), async (req, res) => {
         .select('id_boutique')          // on ne prend QUE ce dont on a besoin
         .lean();                        // plus rapide, retourne objet JS simple
 
-      console.log(user);
 
       if (!user) {
         return res.status(404).json({ message: "Utilisateur introuvable" });
@@ -49,8 +49,6 @@ router.post("/", authMiddleware, upload.single('image'), async (req, res) => {
       if (req.file) {
         produitData.image = `/uploads/produits/${req.file.filename}`;
       }
-
-      console.log(produitData);
 
       // 3. Créer et sauvegarder
       const produit = new Produit(produitData);
@@ -80,13 +78,11 @@ router.get("/boutique", authMiddleware, async (req, res) => {
     if (!user || !user.id_boutique) {
       return res.status(404).json({ message: "Aucune boutique associée à cet utilisateur" });
     }
-    console.log(user.id_boutique);
     // 2. récupérer les produits de cette boutique
     const produits = await Produit.find({
       id_boutique: user.id_boutique
     }).lean();
 
-    console.log(produits);
     res.json(produits);
 
   } catch (error) {
@@ -103,9 +99,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/group-by-boutique", async (req, res) => {
-  try {
-    const produitsParBoutique = await Produit.aggregate([
+async function getGroupByBoutique () {
+  return await Produit.aggregate([
       // Jointure avec la collection boutiques
       {
         $lookup: {
@@ -139,7 +134,8 @@ router.get("/group-by-boutique", async (req, res) => {
               qt_actuel: "$qt_actuel",
               qt_en_cours_commande: "$qt_en_cours_commande",
               prix_actuel: "$prix_actuel",
-              createdAt: "$createdAt"
+              createdAt: "$createdAt",
+              description: "$description"
             }
           }
         }
@@ -152,13 +148,50 @@ router.get("/group-by-boutique", async (req, res) => {
         }
       }
     ]);
+}
+router.get("/group-by-boutique-client", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const favorisDocs = await Favoris.find(
+      { id_utilisateur: userId },
+      { id_produit: 1, _id: 0 }
+    ).lean();
+
+    const favorisSet = new Set(
+      favorisDocs.map(doc => doc.id_produit.toString())
+    );
+
+    const produitsParBoutique = await getGroupByBoutique();
+
+    const result = produitsParBoutique.map(boutiqueGroup => {
+      const produitsAvecFavori = boutiqueGroup.produits.map(produit => ({
+        ...produit,
+        isFavorite: favorisSet.has(produit._id.toString())
+      }));
+
+      return {
+        ...boutiqueGroup,                // garde _id, boutique, etc.
+        produits: produitsAvecFavori     // remplace seulement produits
+      };
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/group-by-boutique", async (req, res) => {
+  try {
+    const produitsParBoutique = await getGroupByBoutique();
 
     res.json(produitsParBoutique);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-
 // Lire un produit par ID
 router.get("/:id", async (req, res) => {
   try {
