@@ -1,6 +1,5 @@
 /* Wrapper global */
 .page-wrapper {
-  height: calc(100vh - 90px); /* 90px = hauteur navbar */
   display: flex;
   justify-content: center;
   padding-top: 120px;
@@ -26,4 +25,71 @@
 .card-img-top {
   height: 180px;
   object-fit: cover;
+}
+
+
+.favorite-btn {
+  z-index: 10;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.favorite-btn:hover i {
+  transform: scale(1.15);
+  transition: transform 0.2s;
+}
+
+.description-text {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  min-height: 4.2em;     /* force hauteur similaire */
+  overflow: hidden;
+}
+
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.12) !important;
+}
+
+/* On garde les cartes de même hauteur */
+.card-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/* Ajouts / modifications */
+
+.product-card {
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+}
+
+.modal-content {
+  border-radius: 16px;
+}
+
+.btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Pour que le texte description reste lisible */
+.modal-body p {
+  line-height: 1.6;
+  color: #555;
 }

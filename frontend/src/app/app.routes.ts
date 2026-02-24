@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
-import { Dashboard } from './pages/dashboard/dashboard';
 import { Home } from './pages/home/home';
 import { HomeComponent } from './pages/admin-home/admin-home';
 import { CommandeSearch } from './pages/commande-search/commande-search';
@@ -25,7 +24,8 @@ export const routes: Routes = [
     canActivate: [LoginRedirectGuard]
   },
   { path: 'login', component: Login },
-  { path: 'dashboard', component: Dashboard },
+  { path: 'login/boutique', component: Login },
+  { path: 'login/mall', component: Login },
   { path: 'admin-boutique', component: HomeComponent },
   { path: 'admin-boutique/commande-search', component: CommandeSearch },
   { path: 'admin-boutique/produit', component: ProduitComponent },

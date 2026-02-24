@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { RouterModule, RouterLink } from '@angular/router';
@@ -15,17 +15,16 @@ export class Navbar {
   isScrolled = false;
   isHomePage = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,private cdr: ChangeDetectorRef) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.isHomePage = event.urlAfterRedirects === '/' || event.urlAfterRedirects === '/home';
-        
         console.log("'" +event.urlAfterRedirects + "'");
-
-        // Si ce n’est PAS la home → navbar toujours opaque
+       // Si ce n’est PAS la home → navbar toujours opaque
         if (!this.isHomePage) {
           this.isScrolled = true;
+          this.cdr.detectChanges();
         }
       });
   }

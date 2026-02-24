@@ -7,4 +7,8 @@ export interface Produit {
   prix_actuel: number;
   image?: string;
   createdAt?: string;
+
+  isFavorite?: boolean;          
+
+  boutique?: { nom: string; };
 }

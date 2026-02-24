@@ -53,6 +53,10 @@ export class ProduitComponent implements OnInit {
     });
   }
 
+  notify(id : string) {
+    this.produitService.notify(id);
+  }
+
   openAddForm() {
     this.isEditing = false;
     this.resetForm();
@@ -177,6 +181,7 @@ export class ProduitComponent implements OnInit {
     this.produitService.updateQuantiteActuelle(this.currentProduit._id, payload)
       .subscribe({
         next: () => {
+          this.notify(this.currentProduit._id);
           this.loadProduits();
           this.closeForm();
           alert(`Entrée de ${this.quantiteAjout} unités enregistrée. Nouvelle quantité : ${nouvelleQt}`);
