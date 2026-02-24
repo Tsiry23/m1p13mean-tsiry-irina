@@ -16,6 +16,7 @@ const Favoris = require('../models/Favoris');
 function obtenirPlageDates(query) {
   let debut = query.start_date ? new Date(query.start_date) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   let fin = query.end_date ? new Date(query.end_date) : new Date();
+  fin.setDate(fin.getDate() + 1);;
 
   if (isNaN(debut.getTime()) || isNaN(fin.getTime())) {
     throw new Error('Dates invalides');
@@ -238,7 +239,7 @@ function obtenirProduitsStockFaible(produits, seuil = 10) {
 
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const { debut, fin } = obtenirPlageDates(req.query);
+    let { debut, fin } = obtenirPlageDates(req.query);
     const { debutAnnee, debutMois, debutSemaine, maintenant } = obtenirPlagesFixes();
 
     const contexte = await recupererContexteBoutique(req.user.id);

@@ -98,7 +98,6 @@
               <th>Image</th>
               <th>Nom</th>
               <th>Qté Actuelle</th>
-              <th>En commande</th>
               <th>Prix</th>
               <th style="width: 180px;">Actions</th>
             </tr>
@@ -111,7 +110,6 @@
               </td>
               <td>{{ p.nom }}</td>
               <td>{{ p.qt_actuel }}</td>
-              <td>{{ p.qt_en_cours_commande }}</td>
               <td>{{ p.prix_actuel | number:'1.0-0' }} Ar</td>
               <td>
                 <button class="btn btn-sm btn-outline-success" (click)="openEntreeForm(p)" title="Déclarer entrée">
