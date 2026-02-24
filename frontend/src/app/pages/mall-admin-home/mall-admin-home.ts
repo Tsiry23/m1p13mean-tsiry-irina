@@ -9,13 +9,15 @@ import { Boutique } from '../../models/boutique.model';
 import { AfterViewInit, OnDestroy } from '@angular/core';
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { FormsModule } from '@angular/forms';
+import { HistoLoyer } from '../../models/histo-loyer.model';
+import { PaginatedResponse } from '../../models/paginated-response.model';
 
 @Component({
   selector: 'app-mall-admin-home',
   standalone: true,
   imports: [MallAdminSidebar, CommonModule, FormsModule],
   templateUrl: './mall-admin-home.html',
-  styleUrl: './mall-admin-home.css',
+  styleUrls: ['../admin-home/variables.css', './mall-admin-home.css'],
 })
 export class MallAdminHome implements OnInit, AfterViewInit, OnDestroy {
   metrics?: DashboardMetrics;
@@ -33,9 +35,20 @@ export class MallAdminHome implements OnInit, AfterViewInit, OnDestroy {
 
   boutiques: Boutique[] = [];
 
+  // Historique changement loyer
+
+  histoLoyers: HistoLoyer[] = [];
+  page = 1;
+  limit = 10;
+  totalPages = 0;
+  dateDebut?: string;
+  dateFin?: string;
+  loadingHisto = false;
+  selectedForTableBoutiqueId?: string;
+
   constructor(private dashboardService: DashboardService, private cdr: ChangeDetectorRef, private boutiqueService: BoutiqueService) { }
 
-   ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.loadPaiementEvolution();
   }
 
@@ -59,6 +72,7 @@ export class MallAdminHome implements OnInit, AfterViewInit, OnDestroy {
 
     this.loadPaiementEvolution();
     this.loadBoutiques();
+    this.loadHistoLoyer();
   }
 
   loadPaiementEvolution(): void {
@@ -94,6 +108,30 @@ export class MallAdminHome implements OnInit, AfterViewInit, OnDestroy {
       error: (err) => {
         console.error('Erreur chargement boutiques', err);
         this.loadingBoutiques = false;
+      },
+    });
+  }
+
+  loadHistoLoyer(): void {
+    this.loadingHisto = true;
+
+    this.dashboardService.getHistoLoyer({
+      id_boutique: this.selectedForTableBoutiqueId,
+      date_debut: this.dateDebut,
+      date_fin: this.dateFin,
+      page: this.page,
+      limit: this.limit,
+    }).subscribe({
+      next: (res) => {
+        this.histoLoyers = res.data;
+        this.totalPages = res.totalPages;
+        this.loadingHisto = false;
+
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erreur histo loyer', err);
+        this.loadingHisto = false;
       },
     });
   }
@@ -161,5 +199,19 @@ export class MallAdminHome implements OnInit, AfterViewInit, OnDestroy {
       'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
       'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc',
     ];
+  }
+
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      this.loadHistoLoyer();
+    }
+  }
+
+  prevPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.loadHistoLoyer();
+    }
   }
 }

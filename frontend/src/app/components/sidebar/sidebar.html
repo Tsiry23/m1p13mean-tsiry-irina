@@ -1,5 +1,18 @@
+<!-- Bouton burger (mobile only) -->
+<button class="mobile-toggle" (click)="toggleSidebar()">
+  <i class="bi bi-list"></i>
+</button>
+
 <nav id="sidebar" [class.active]="isActive">
   <div class="sidebar-inner">
+
+    <!-- Header mobile avec bouton fermer -->
+    <div class="mobile-header">
+      <span class="mobile-title">Mall Manager</span>
+      <button class="close-btn" (click)="toggleSidebar()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
 
     <ul class="nav-list">
 
@@ -13,7 +26,7 @@
 
       <!-- Dashboard -->
       <li>
-        <a routerLink="/admin-boutique/dashboard" class="nav-link">
+        <a routerLink="/admin-boutique/dashboard" class="nav-link" (click)="closeOnMobile()">
           <i class="bi bi-grid-1x2-fill nav-icon"></i>
           <span class="nav-link-text">Dashboard</span>
         </a>
@@ -21,7 +34,7 @@
 
       <!-- Boutiques -->
       <li>
-        <a routerLink="/admin-boutique/vente" class="nav-link">
+        <a routerLink="/admin-boutique/vente" class="nav-link" (click)="closeOnMobile()">
           <i class="bi bi-building nav-icon"></i>
           <span class="nav-link-text">Vente</span>
         </a>
@@ -29,7 +42,7 @@
 
       <!-- Produits -->
       <li>
-        <a routerLink="/admin-boutique/produit" class="nav-link">
+        <a routerLink="/admin-boutique/produit" class="nav-link" (click)="closeOnMobile()">
           <i class="bi bi-box-seam nav-icon"></i>
           <span class="nav-link-text">Produits</span>
         </a>
@@ -37,7 +50,7 @@
 
       <!-- Commandes -->
       <li>
-        <a routerLink="/admin-boutique/commande-search" class="nav-link">
+        <a routerLink="/admin-boutique/commande-search" class="nav-link" (click)="closeOnMobile()">
           <i class="bi bi-basket nav-icon"></i>
           <span class="nav-link-text">Commandes</span>
         </a>

@@ -5,6 +5,8 @@ import { catchError, tap } from 'rxjs/operators';
 import { DashboardMetrics } from '../../models/dashboard-metrics.model';
 import { environment } from '../../../environments/environment';
 import { PaiementEvolution } from '../../models/paiement-evolution.model';
+import { PaginatedResponse } from '../../models/paginated-response.model';
+import { HistoLoyer } from '../../models/histo-loyer.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +27,7 @@ export class DashboardService {
     const headers = this.getAuthHeaders();
 
     return this.http
-      .get<DashboardMetrics>(this.apiUrl+'/metrics', {
+      .get<DashboardMetrics>(this.apiUrl + '/metrics', {
         headers,
         params,
         responseType: 'json'
@@ -59,6 +61,37 @@ export class DashboardService {
       )
       .pipe(
         catchError(this.handleError<PaiementEvolution>('getPaiementsEvolution'))
+      );
+  }
+
+  getHistoLoyer(
+    options: {
+      id_boutique?: string | null;
+      date_debut?: string;
+      date_fin?: string;
+      page?: number;
+      limit?: number;
+    }
+  ): Observable<PaginatedResponse<HistoLoyer>> {
+
+    const headers = this.getAuthHeaders();
+
+    const params: any = {
+      page: options.page ?? 1,
+      limit: options.limit ?? 10,
+    };
+
+    if (options.id_boutique) params.id_boutique = options.id_boutique;
+    if (options.date_debut) params.date_debut = options.date_debut;
+    if (options.date_fin) params.date_fin = options.date_fin;
+
+    return this.http
+      .get<PaginatedResponse<HistoLoyer>>(
+        `${this.apiUrl}/histo-loyer`,
+        { headers, params }
+      )
+      .pipe(
+        catchError(this.handleError<PaginatedResponse<HistoLoyer>>('getHistoLoyer'))
       );
   }
 

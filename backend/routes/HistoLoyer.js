@@ -1,9 +1,70 @@
 const express = require("express");
 const router = express.Router();
 const HistoLoyer = require("../models/HistoLoyer");
+const Boutique = require("../models/Boutique")
+
+const authMiddleware = require("../middleware/auth");
+
+router.get("/init", async (req, res) => {
+  try {
+    const boutiques = await Boutique.find({
+      loyer: { $ne: null }
+    });
+
+    if (boutiques.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Aucune boutique avec loyer trouvée"
+      });
+    }
+
+    const crees = [];
+    const existants = [];
+
+    for (const boutique of boutiques) {
+
+      // 🔍 Vérifier s'il existe déjà un historique
+      const dejaExiste = await HistoLoyer.findOne({
+        id_boutique: boutique._id
+      });
+
+      if (dejaExiste) {
+        existants.push(boutique.nom);
+        continue;
+      }
+
+      // 📅 Date aléatoire avant aujourd'hui
+      const dateChangement = randomPastDate(2);
+
+      await HistoLoyer.create({
+        id_boutique: boutique._id,
+        nouvelle_valeur: boutique.loyer,
+        date_changement: dateChangement
+      });
+
+      crees.push(boutique.nom);
+    }
+
+    res.json({
+      success: true,
+      totalBoutiques: boutiques.length,
+      historiquesCrees: crees.length,
+      historiquesExistants: existants.length,
+      crees,
+      existants
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Erreur init historique loyer"
+    });
+  }
+});
 
 // Créer un historique de loyer
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
     const histoLoyer = new HistoLoyer(req.body);
     await histoLoyer.save();
@@ -24,7 +85,7 @@ router.get("/", async (req, res) => {
 });
 
 // Lire un historique par ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const histo = await HistoLoyer.findById(req.params.id);
 
@@ -39,7 +100,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Mettre à jour un historique
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const histo = await HistoLoyer.findByIdAndUpdate(
       req.params.id,
@@ -58,7 +119,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Supprimer un historique
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const histo = await HistoLoyer.findByIdAndDelete(req.params.id);
 
@@ -71,5 +132,17 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+function randomPastDate(maxYearsBack = 2) {
+  const now = new Date();
+  const past = new Date();
+  past.setFullYear(now.getFullYear() - maxYearsBack);
+
+  const randomTime =
+    past.getTime() +
+    Math.random() * (now.getTime() - past.getTime());
+
+  return new Date(randomTime);
+}
 
 module.exports = router;

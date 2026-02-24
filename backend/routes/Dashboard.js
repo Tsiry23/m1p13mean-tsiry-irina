@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const Boutique = require("../models/Boutique");
 const Paiement = require("../models/Paiement");
 const HistoLoyer = require("../models/HistoLoyer");
@@ -170,7 +172,7 @@ router.get("/histo-loyer", async (req, res) => {
       date_debut,
       date_fin,
       page = 1,
-      limit = 10
+      limit = 10,
     } = req.query;
 
     const pageNum = parseInt(page);
@@ -180,28 +182,26 @@ router.get("/histo-loyer", async (req, res) => {
     // période par défaut = mois courant
     let startDate, endDate;
 
-    if (date_debut && date_fin) {
-      startDate = new Date(date_debut);
-      endDate = new Date(date_fin);
-      endDate.setHours(23, 59, 59, 999);
-    } else {
-      const now = new Date();
-      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      endDate = new Date(
-        now.getFullYear(),
-        now.getMonth() + 1,
-        0,
-        23, 59, 59, 999
-      );
-    }
+    const filter = {};
 
-    // ✅ construction dynamique du filtre
-    const filter = {
-      date_changement: {
-        $gte: startDate,
-        $lte: endDate
+    if (date_debut || date_fin) {
+      if (date_debut) {
+        startDate = new Date(date_debut);
+
+        filter.date_changement = {
+          $gte: startDate
+        };
       }
-    };
+
+      if (date_fin) {
+        endDate = new Date(date_fin);
+        endDate.setHours(23, 59, 59, 999);
+
+        filter.date_changement = {
+          $lte: endDate
+        };
+      }
+    }
 
     // ✅ filtre boutique optionnel
     if (id_boutique) {
@@ -214,7 +214,7 @@ router.get("/histo-loyer", async (req, res) => {
         .populate("id_boutique", "nom")
         .sort({ date_changement: -1 })
         .skip(skip)
-        .limit(limitNum)
+        .limit(limitNum),
     ]);
 
     res.json({
@@ -222,9 +222,8 @@ router.get("/histo-loyer", async (req, res) => {
       limit: limitNum,
       total,
       totalPages: Math.ceil(total / limitNum),
-      data
+      data,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Erreur serveur" });

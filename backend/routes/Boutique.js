@@ -1,19 +1,71 @@
 const express = require("express");
 const router = express.Router();
 const Boutique = require("../models/Boutique");
+const multer = require("multer");
+const path = require("path");
 
 const authMiddleware = require("../middleware/auth");
 
-// Créer une boutique
-router.post("/", authMiddleware, async (req, res) => {
-  try {
-    const boutique = new Boutique(req.body);
-    await boutique.save();
-    res.status(201).json(boutique);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+const storage = multer.diskStorage({
+  destination: "./uploads/boutiques/",
+  filename: (req, file, cb) => {
+    const uniqueSuffix =
+      Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  },
 });
+
+const upload = multer({ storage });
+
+// Créer une boutique
+router.post(
+  "/",
+  authMiddleware,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      // ==============================
+      // 1️⃣ Préparer les données boutique
+      // ==============================
+      const boutiqueData = {
+        nom: req.body.nom,
+        description: req.body.description || null,
+
+        taille_m2:
+          req.body.taille_m2 !== undefined
+            ? Number(req.body.taille_m2)
+            : null,
+
+        loyer:
+          req.body.loyer !== undefined
+            ? Number(req.body.loyer)
+            : null,
+      };
+
+      // image (optionnelle)
+      if (req.file) {
+        boutiqueData.image = `/uploads/boutiques/${req.file.filename}`;
+      }
+
+      // ==============================
+      // 2️⃣ Création & sauvegarde
+      // ==============================
+      const boutique = new Boutique(boutiqueData);
+      await boutique.save();
+
+      // ==============================
+      // 3️⃣ Réponse
+      // ==============================
+      res.status(201).json(boutique);
+
+    } catch (error) {
+      console.error(error);
+      res.status(400).json({
+        message: error.message || "Erreur lors de la création de la boutique",
+      });
+    }
+  }
+);
 
 // Lire toutes les boutiques
 router.get("/", async (req, res) => {
@@ -30,11 +82,11 @@ router.get("/init", async (req, res) => {
   try {
     let boutiques = [];
   
-    boutiques.push(new Boutique({ nom : "San Marina", description : "Magasin chaussure" , taille_m2 : 125, loyer : 5625000, image : "boutique1.jpg" }));
-    boutiques.push(new Boutique({ nom : "Christian Dior parfum", description : "Magasin parfum" , taille_m2 : 50, loyer : 3400000, image : "boutique2.jpg" }));
-    boutiques.push(new Boutique({ nom : "Food & friends", description : "Food court" ,taille_m2 : 200, loyer : 9000000, image : "boutique3.jpg" }));
-    boutiques.push(new Boutique({ nom : "Patatam", description : "Magasin de vêtements", taille_m2 : 150, loyer : 7500000, image : "boutique4.jpg" }));
-    boutiques.push(new Boutique({ nom : "Delicious", description : "Foodcourt" , taille_m2 : 150, loyer : 9000000, image : "boutique5.jpg" }));
+    boutiques.push(new Boutique({ nom : "San Marina", description : "Magasin chaussure" , taille_m2 : 125, loyer : 5625000, image : "/boutique1.jpg" }));
+    boutiques.push(new Boutique({ nom : "Christian Dior parfum", description : "Magasin parfum" , taille_m2 : 50, loyer : 3400000, image : "/boutique2.jpg" }));
+    boutiques.push(new Boutique({ nom : "Food & friends", description : "Food court" ,taille_m2 : 200, loyer : 9000000, image : "/boutique3.jpg" }));
+    boutiques.push(new Boutique({ nom : "Patatam", description : "Magasin de vêtements", taille_m2 : 150, loyer : 7500000, image : "/boutique4.jpg" }));
+    boutiques.push(new Boutique({ nom : "Delicious", description : "Foodcourt" , taille_m2 : 150, loyer : 9000000, image : "/boutique5.jpg" }));
 
     for (const boutique of boutiques) {
       await boutique.save();
