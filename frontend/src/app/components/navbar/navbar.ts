@@ -20,7 +20,8 @@ export class Navbar {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.isHomePage = event.urlAfterRedirects === '/' || event.urlAfterRedirects === '/home';
-        // Si ce n’est PAS la home → navbar toujours opaque
+        console.log("'" +event.urlAfterRedirects + "'");
+       // Si ce n’est PAS la home → navbar toujours opaque
         if (!this.isHomePage) {
           this.isScrolled = true;
           this.cdr.detectChanges();

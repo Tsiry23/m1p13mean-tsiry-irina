@@ -26,3 +26,24 @@
   font-size: 0.95rem;
   color: #5a7a7c;
 }
+
+.metric-card {
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+}
+
+.metric-card h6 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.metric-card h3 {
+  margin: 0;
+  font-weight: 700;
+}

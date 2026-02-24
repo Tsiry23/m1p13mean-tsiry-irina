@@ -1,13 +1,12 @@
-Je vais avoir besoin que tu m'aides à élaborer une page pour afficher la liste des produits des boutiques dans mon application Angular :
+Voici les fonctionnalités que j'ai destiné d'implémenter pour commencer le dashboard.
 
-ça c'est la page d'accueil :
+- métriques simples : nombres de boutiques actives, taux d'occupation (boutiques louée/totales), total du loyer attendu pour mois courrant, 
+total du montant payé pour le mois courrant, reste à recevoir pour le mois 
+- évolution du total des paiements sur une année choisie avec filtre par boutique 
+- historique paginée des changements de loyer avec filtre par période (l'année courante), par boutique
 
-<app-navbar></app-navbar>
-<app-hero></app-hero>
-<app-services></app-services>
-<app-boutique-slider></app-boutique-slider>
-<app-contact></app-contact>
-<app-footer></app-footer>
+Voici les collections dont tu auras besoin pour implémenter ces fonctionnalités.
 
-Il y a juste à garder la navbar et le footer. On mettra le contenu principal au centre. 
 
+
+On va commencer par les endpoints à créer d'abord.
