@@ -10,6 +10,7 @@ import { MallAdminHome } from './pages/mall-admin-home/mall-admin-home';
 import { MallBoutique } from './pages/mall-boutique/mall-boutique';
 import { PaymentHistory } from './pages/payment-history/payment-history';
 import { LoginRedirectGuard } from './guards/login-redirect.guard';
+import { InscriptionComponent } from './pages/inscription/inscription';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -23,6 +24,7 @@ export const routes: Routes = [
     component: Login,
     canActivate: [LoginRedirectGuard]
   },
+  { path: 'inscription', component: InscriptionComponent },
   { path: 'login', component: Login },
   { path: 'login/boutique', component: Login },
   { path: 'login/mall', component: Login },

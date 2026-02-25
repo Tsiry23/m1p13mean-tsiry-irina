@@ -1,0 +1,131 @@
+<div
+  class="login-container container d-flex justify-content-center align-items-center min-vh-100"
+  id="container"
+>
+  <div class="card shadow p-4" style="width: 100%; max-width: 420px">
+    <h1 class="text-center mb-4">Inscription</h1>
+
+    <form (ngSubmit)="inscrire()" #inscriptionForm="ngForm">
+      <!-- Nom -->
+      <div class="mb-3">
+        <label class="form-label">Nom</label>
+        <input
+          type="text"
+          class="form-control"
+          name="nom"
+          [(ngModel)]="nom"
+          required
+          minlength="2"
+          #nomCtrl="ngModel"
+        />
+        @if (nomCtrl.invalid && (nomCtrl.dirty || nomCtrl.touched)) {
+          <div class="text-danger small">
+            Le nom est requis (min. 2 caractères)
+          </div>
+        }
+      </div>
+
+      <!-- Prénom -->
+      <div class="mb-3">
+        <label class="form-label">Prénom</label>
+        <input
+          type="text"
+          class="form-control"
+          name="prenom"
+          [(ngModel)]="prenom"
+          required
+          minlength="2"
+          #prenomCtrl="ngModel"
+        />
+        @if (prenomCtrl.invalid && (prenomCtrl.dirty || prenomCtrl.touched)) {
+          <div class="text-danger small">
+            Le prénom est requis (min. 2 caractères)
+          </div>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="email"
+          required
+          email
+          #emailCtrl="ngModel"
+        />
+        @if (emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)) {
+          <div class="text-danger small">
+            @if (emailCtrl.errors?.['required']) {Email requis}
+            @else {Format email invalide}
+          </div>
+        }
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="mb-3">
+        <label class="form-label">Mot de passe</label>
+
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control"
+            name="mdp"
+            [(ngModel)]="mdp"
+            required
+            minlength="6"
+            #mdpCtrl="ngModel"
+          />
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="togglePassword()"
+            tabindex="-1"
+          >
+            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+
+        @if (mdpCtrl.invalid && (mdpCtrl.dirty || mdpCtrl.touched)) {
+          <div class="text-danger small">
+            Le mot de passe doit contenir au moins 6 caractères
+          </div>
+        }
+      </div>
+
+      <!-- Erreur serveur / message global -->
+      @if (errorMessage) {
+        <div class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="alert alert-success">
+          {{ successMessage }}
+        </div>
+      }
+
+      <!-- Bouton -->
+      <button
+        type="submit"
+        class="btn btn-primary w-100 mt-2"
+        [disabled]="loading || !inscriptionForm.valid"
+      >
+        @if (loading) {
+          Inscription en cours...
+        } @else {
+          Créer mon compte
+        }
+      </button>
+
+      <!-- Lien vers connexion -->
+      <div class="text-center mt-4">
+        <small>Déjà un compte ? <a routerLink="/login" class="text-primary">Se connecter</a></small>
+      </div>
+    </form>
+  </div>
+</div>
