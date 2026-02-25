@@ -1,12 +1,72 @@
-Voici les fonctionnalités que j'ai destiné d'implémenter pour commencer le dashboard.
+Terminons avec celui là :
 
-- métriques simples : nombres de boutiques actives, taux d'occupation (boutiques louée/totales), total du loyer attendu pour mois courrant, 
-total du montant payé pour le mois courrant, reste à recevoir pour le mois 
-- évolution du total des paiements sur une année choisie avec filtre par boutique 
-- historique paginée des changements de loyer avec filtre par période (l'année courante), par boutique
+router.get("/histo-loyer", async (req, res) => {
+  try {
+    const {
+      id_boutique,
+      date_debut,
+      date_fin,
+      page = 1,
+      limit = 10
+    } = req.query;
 
-Voici les collections dont tu auras besoin pour implémenter ces fonctionnalités.
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
 
+    // période par défaut = mois courant
+    let startDate, endDate;
 
+    if (date_debut && date_fin) {
+      startDate = new Date(date_debut);
+      endDate = new Date(date_fin);
+      endDate.setHours(23, 59, 59, 999);
+    } else {
+      const now = new Date();
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      endDate = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        0,
+        23, 59, 59, 999
+      );
+    }
 
-On va commencer par les endpoints à créer d'abord.
+    // ✅ construction dynamique du filtre
+    const filter = {
+      date_changement: {
+        $gte: startDate,
+        $lte: endDate
+      }
+    };
+
+    // ✅ filtre boutique optionnel
+    if (id_boutique) {
+      filter.id_boutique = id_boutique;
+    }
+
+    const [total, data] = await Promise.all([
+      HistoLoyer.countDocuments(filter),
+      HistoLoyer.find(filter)
+        .populate("id_boutique", "nom")
+        .sort({ date_changement: -1 })
+        .skip(skip)
+        .limit(limitNum)
+    ]);
+
+    res.json({
+      page: pageNum,
+      limit: limitNum,
+      total,
+      totalPages: Math.ceil(total / limitNum),
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
+On fait comme tout à l'heure pour les étapes.
+Les modèles 

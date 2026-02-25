@@ -25,6 +25,7 @@ var favorisRouter = require('./routes/Favoris');
 var emailRouter = require('./routes/Email');
 var dashboardBoutiqueRouter = require('./routes/dashboardBoutique');
 var dashboardRouter = require('./routes/Dashboard');
+var histoLoyerRouter = require('./routes/HistoLoyer');
 
 var app = express();
 
@@ -54,6 +55,7 @@ app.use('/favoris', favorisRouter);
 app.use('/email', emailRouter);
 app.use('/dashboard-boutique', dashboardBoutiqueRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/histo-loyer', histoLoyerRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // catch 404 and forward to error handler

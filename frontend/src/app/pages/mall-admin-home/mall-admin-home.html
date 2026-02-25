@@ -3,7 +3,6 @@
 
   <main class="content align-items-start text-start">
     <h1 class="mb-4">Tableau de bord</h1>
-
     <div *ngIf="loading" class="text-muted">Chargement des métriques...</div>
 
     <div class="row g-3 w-100" *ngIf="metrics">
@@ -96,6 +95,75 @@
         <div *ngIf="loadingEvolution" class="text-muted">Chargement du graphique...</div>
 
         <canvas id="paiementChart" height="120"></canvas>
+      </div>
+    </div>
+
+    <div class="card p-3 mb-3 w-100">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">Boutique</label>
+          <select class="form-select" [(ngModel)]="selectedForTableBoutiqueId">
+            <option [ngValue]="null">Toutes les boutiques</option>
+            <option *ngFor="let b of boutiques" [ngValue]="b._id">
+              {{ b.nom }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Date début</label>
+          <input type="date" class="form-control" [(ngModel)]="dateDebut" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Date fin</label>
+          <input type="date" class="form-control" [(ngModel)]="dateFin" />
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-primary w-100" (click)="loadHistoLoyer()">Filtrer</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card w-100">
+      <div class="table-responsive">
+        <table class="table table-striped mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Boutique</th>
+              <th>Nouveau loyer</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let h of histoLoyers">
+              <td>{{ h.id_boutique.nom }}</td>
+              <td>{{ h.nouvelle_valeur | number }}</td>
+              <td>{{ h.date_changement | date: 'dd/MM/yyyy' }}</td>
+            </tr>
+
+            <tr *ngIf="!loadingHisto && histoLoyers.length === 0">
+              <td colspan="4" class="text-center text-muted">Aucun historique trouvé</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="d-flex justify-content-between align-items-center mt-3 w-100">
+        <button class="btn btn-outline-secondary" [disabled]="page === 1" (click)="prevPage()">
+          Précédent
+        </button>
+
+        <span>Page {{ page }} / {{ totalPages }}</span>
+
+        <button
+          class="btn btn-outline-secondary"
+          [disabled]="page === totalPages"
+          (click)="nextPage()"
+        >
+          Suivant
+        </button>
       </div>
     </div>
   </main>

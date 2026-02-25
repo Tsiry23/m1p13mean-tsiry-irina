@@ -32,5 +32,11 @@ export class SidebarComponent implements OnInit {
     }
   }
 
+  closeOnMobile() {
+    if (window.innerWidth <= 768) {
+      this.isActive = false;
+    }
+  }
+
   ngOnInit(): void {}
 }

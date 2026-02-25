@@ -5,7 +5,7 @@ import { RouterModule, RouterLink } from '@angular/router';
 @Component({
   standalone: true,
   selector: 'app-mall-admin-sidebar',
-  imports: [CommonModule, RouterModule ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './mall-admin-sidebar.html',
   styleUrl: './mall-admin-sidebar.css',
 })
@@ -32,5 +32,11 @@ export class MallAdminSidebar {
     }
   }
 
-  ngOnInit(): void {}
+  closeOnMobile() {
+    if (window.innerWidth <= 768) {
+      this.isActive = false;
+    }
+  }
+
+  ngOnInit(): void { }
 }

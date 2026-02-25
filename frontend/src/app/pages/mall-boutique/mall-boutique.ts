@@ -154,4 +154,8 @@ export class MallBoutique implements OnInit {
       }
     });
   }
+
+  getImageUrl(image?: string): string {
+    return image ? `${environment.apiBaseUrl}${image}` : '/img/default-product.png';
+  }
 }

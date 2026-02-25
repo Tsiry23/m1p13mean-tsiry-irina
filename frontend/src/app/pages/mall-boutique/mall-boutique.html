@@ -1,8 +1,7 @@
 <div class="layout" id="container">
   <app-mall-admin-sidebar></app-mall-admin-sidebar>
 
-  <!-- Modal Paiement -->
-  <!-- Modal Paiement -->
+<!-- Modal Paiement -->
 <div
   class="modal fade show"
   tabindex="-1"
@@ -175,7 +174,7 @@
               <td>
                 <img
                   *ngIf="b.image"
-                  [src]="'img/' + b.image"
+                  [src]="getImageUrl(b.image)"
                   style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px"
                 />
               </td>
