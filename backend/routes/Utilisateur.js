@@ -151,10 +151,12 @@ router.get('/', async (req, res) => {
 // POST /utilisateurs
 // Crée un nouvel utilisateur (avec hashage du mot de passe)
 // -----------------------------------------------------------------------------
-router.post('/', async (req, res) => {
+router.post('/inscription', async (req, res) => {
   try {
-    const { nom, prenom, email, mdp, id_boutique, id_role } = req.body;
+    const { nom, prenom, email, mdp } = req.body;
 
+    const roleClient = await Role.findOne({ nom: "client" });
+    const id_role = roleClient._id
     // 1. Validation minimale des champs obligatoires
     if (!nom || !prenom || !email || !mdp || !id_role) {
       return res.status(400).json({
@@ -182,7 +184,6 @@ router.post('/', async (req, res) => {
       prenom,
       email: email.toLowerCase(),
       mdp: mdpHashe,
-      id_boutique: id_boutique || null, // peut être null si pas obligatoire
       id_role
     });
 
