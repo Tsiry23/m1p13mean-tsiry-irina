@@ -15,12 +15,13 @@ export class PaiementService {
   constructor(private http: HttpClient) { }
 
   // 🔐 Header avec token
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+  private getAuthHeaders(): HttpHeaders | undefined {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
 
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+    const token = localStorage.getItem('token');
+    return token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : undefined;
   }
 
   // ➕ Créer un paiement
@@ -88,6 +89,30 @@ export class PaiementService {
 
     return this.http.get<PaiementPopulate[]>(
       `${this.apiUrl}/search`,
+      {
+        headers: this.getAuthHeaders(),
+        params
+      }
+    );
+  }
+
+  searchPaiementsForBoutique(filters: {
+    dateDebut?: string;
+    dateFin?: string;
+  }): Observable<PaiementPopulate[]> {
+
+    const params: any = {};
+
+    if (filters.dateDebut) {
+      params.dateDebut = filters.dateDebut;
+    }
+
+    if (filters.dateFin) {
+      params.dateFin = filters.dateFin;
+    }
+
+    return this.http.get<PaiementPopulate[]>(
+      `${this.apiUrl}/boutique/search`,
       {
         headers: this.getAuthHeaders(),
         params

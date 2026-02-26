@@ -1,56 +1,101 @@
-<div
-  class="login-container container d-flex justify-content-center align-items-center min-vh-100"
-  id="container"
->
-  <div class="card shadow p-4" style="width: 100%; max-width: 420px">
-    <h1 class="text-center mb-4">Connexion</h1>
+<div class="login-wrapper d-flex justify-content-center align-items-center min-vh-100">
+  <div class="login-card">
 
-    <form (ngSubmit)="login()" #loginForm="ngForm">
-      <!-- Email -->
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" name="email" [(ngModel)]="email" required email />
-      </div>
+    <!-- Panneau gauche : formulaire -->
+    <div class="login-form-panel">
+      <div class="login-form-inner">
+        <div class="login-header">
+          <p class="login-welcome">BIENVENUE SUR</p>
+          <div class="login-brand">
+            <span class="brand-name">MonApp</span>
+          </div>
+          <p class="login-subtitle">Connectez-vous pour accéder à votre espace personnel.</p>
+        </div>
 
-      <!-- Mot de passe -->
-      <div class="mb-3">
-        <label class="form-label">Mot de passe</label>
+        <form (ngSubmit)="login()" #loginForm="ngForm" class="login-form">
 
-        <div class="input-group">
-          <input
-            [type]="showPassword ? 'text' : 'password'"
-            class="form-control"
-            name="mdp"
-            [(ngModel)]="mdp"
-            required
-          />
+          <!-- Email -->
+          <div class="field-group">
+            <div class="input-wrapper">
+              <i class="bi bi-envelope field-icon"></i>
+              <input
+                type="email"
+                class="field-input"
+                name="email"
+                [(ngModel)]="email"
+                placeholder="Adresse email"
+                required
+                email
+              />
+            </div>
+          </div>
 
+          <!-- Mot de passe -->
+          <div class="field-group">
+            <div class="input-wrapper">
+              <i class="bi bi-lock field-icon"></i>
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                class="field-input"
+                name="mdp"
+                [(ngModel)]="mdp"
+                placeholder="Mot de passe"
+                required
+              />
+              <button
+                type="button"
+                class="toggle-password"
+                (click)="togglePassword()"
+                tabindex="-1"
+              >
+                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Erreur -->
+          @if (errorMessage) {
+            <div class="error-message">
+              <i class="bi bi-exclamation-circle"></i>
+              {{ errorMessage }}
+            </div>
+          }
+
+          <!-- Bouton -->
           <button
-            type="button"
-            class="btn btn-outline-secondary"
-            (click)="togglePassword()"
-            tabindex="-1"
+            type="submit"
+            class="btn-signin"
+            [disabled]="loading || !loginForm.valid"
           >
-            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+            @if (loading) {
+              <span class="spinner"></span>
+              Connexion...
+            } @else {
+              Se connecter
+            }
           </button>
-        </div>
+
+          <p class="signup-link">
+            Pas encore de compte ?
+            <a href="#">Créer un compte</a>
+          </p>
+        </form>
       </div>
+    </div>
 
-      <!-- Erreur -->
-      @if (errorMessage) {
-        <div class="alert alert-danger">
-          {{ errorMessage }}
+    <!-- Panneau droit : visuel -->
+    <div class="login-visual-panel">
+      <div class="visual-overlay"></div>
+      <div class="visual-content">
+        <div class="visual-logo">
+          <i class="bi bi-infinity visual-logo-icon"></i>
+          <span class="visual-logo-text">MonApp</span>
         </div>
-      }
+        <p class="visual-tagline">
+          Votre plateforme tout-en-un pour gérer, collaborer et performer au quotidien.
+        </p>
+      </div>
+    </div>
 
-      <!-- Bouton -->
-      <button type="submit" class="btn btn-primary w-100" [disabled]="loading || !loginForm.valid">
-        @if (loading) {
-          Connexion...
-        } @else {
-          Se connecter
-        }
-      </button>
-    </form>
   </div>
 </div>

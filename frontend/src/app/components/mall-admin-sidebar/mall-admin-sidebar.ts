@@ -7,7 +7,7 @@ import { RouterModule, RouterLink } from '@angular/router';
   selector: 'app-mall-admin-sidebar',
   imports: [CommonModule, RouterModule],
   templateUrl: './mall-admin-sidebar.html',
-  styleUrl: './mall-admin-sidebar.css',
+  styleUrls: ['./mall-admin-sidebar.css'],
 })
 export class MallAdminSidebar {
   isActive = false;

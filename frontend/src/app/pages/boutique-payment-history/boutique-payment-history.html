@@ -1,0 +1,85 @@
+<div class="layout" id="container">
+  <app-sidebar></app-sidebar>
+
+  <main class="content p-4">
+
+    <h1 class="h3 mb-4">Historique des paiements</h1>
+
+    <!-- 🔍 Filtres -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <form class="row g-3 align-items-end">
+
+          <!-- Date début -->
+          <div class="col-md-3">
+            <label class="form-label">Date début</label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="filters.dateDebut"
+              name="dateDebut"
+            />
+          </div>
+
+          <!-- Date fin -->
+          <div class="col-md-3">
+            <label class="form-label">Date fin</label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="filters.dateFin"
+              name="dateFin"
+            />
+          </div>
+
+          <!-- Bouton -->
+          <div class="col-md-2 d-grid">
+            <button type="button" class="btn btn-primary" (click)="search()">
+              <i class="bi bi-search"></i> Rechercher
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- 📄 Liste -->
+    <div class="card">
+      <div class="card-body p-0">
+
+        <table class="table table-hover mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Boutique</th>
+              <th>Date</th>
+              <th class="text-end">Montant (Ar)</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let p of paiements">
+              <td>{{ p.id_boutique.nom }}</td>
+              <td>{{ p.date_ | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td class="text-end fw-bold">
+                {{ p.total_a_payer | number:'1.0-0' }}
+              </td>
+            </tr>
+
+            <tr *ngIf="paiements.length === 0">
+              <td colspan="3" class="text-center text-muted py-4">
+                Aucun paiement trouvé
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- 💰 Total -->
+      <div class="card-footer text-end fw-bold">
+        Total : {{ total | number:'1.0-0' }} Ar
+      </div>
+    </div>
+
+  </main>
+</div>

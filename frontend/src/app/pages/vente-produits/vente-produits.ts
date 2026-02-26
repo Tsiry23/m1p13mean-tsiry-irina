@@ -19,7 +19,7 @@ interface PanierItem {
   standalone: true,
   imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './vente-produits.html',
-  styleUrls: ['./vente-produits.css']
+  styleUrls: ['../admin-home/variables.css', './vente-produits.css']
 })
 export class VenteProduitsComponent implements OnInit {
 

@@ -10,7 +10,7 @@ import { Chart, ChartConfiguration } from 'chart.js/auto';
   standalone: true,
   imports: [SidebarComponent, CommonModule, FormsModule],
   templateUrl: 'admin-home.html',
-  styleUrls: ['admin-home.css']
+  styleUrls: ['variables.css', 'admin-home.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 

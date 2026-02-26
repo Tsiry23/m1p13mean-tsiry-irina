@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
   standalone: true,
   imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './produit.html',
-  styleUrls: ['./produit.css']
+  styleUrls: ['../admin-home/variables.css', './produit.css']
 })
 export class ProduitComponent implements OnInit {
   produits: Produit[] = [];

@@ -1,28 +1,286 @@
-.layout {
+/* ================================================================
+   dashboard-mall-admin.css — Styles propres au tableau de bord
+   admin centre commercial. Dépend de global.css (variables :root)
+   ================================================================ */
+
+/* ── Layout page dashboard ─────────────────────────────────────── */
+.content {
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem 2rem 3rem;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
-.content {
-  flex: 1;
-  margin-left: 80px; /* largeur sidebar fermée, doit correspondre à --sidebar-w-closed */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  text-align: center;
-  padding: 32px;
-  background: #f0f4f5;
-}
-
+/* ── Titre de page ─────────────────────────────────────────────── */
 .content h1 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #1a2e2f;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin: 0 0 1.75rem;
 }
 
-.content p {
+/* ── KPI Cards ─────────────────────────────────────────────────── */
+.metric-card {
+  border: none !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-md) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.metric-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.metric-card .card-body {
+  padding: 1.25rem 1.4rem 1.4rem;
+}
+
+.metric-card h6 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+  margin-bottom: 0.6rem;
+}
+
+.metric-card h3 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Couleurs KPI */
+.metric-card.bg-primary {
+  background: linear-gradient(135deg, #0077B6 0%, #03045E 100%) !important;
+}
+
+.metric-card.bg-success {
+  background: linear-gradient(135deg, #059669 0%, #065f46 100%) !important;
+}
+
+.metric-card.bg-info {
+  background: linear-gradient(135deg, #00B4D8 0%, #0077B6 100%) !important;
+}
+
+.metric-card.bg-warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #fff !important;
+}
+
+.metric-card.bg-warning h6,
+.metric-card.bg-warning h3 {
+  color: #fff !important;
+}
+
+.metric-card.bg-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+}
+
+/* ── Carte graphique évolution paiements ───────────────────────── */
+.card {
+  border-radius: var(--border-radius) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md) !important;
+}
+
+.card-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 1rem 1.25rem !important;
+}
+
+.card-header h5 {
   font-size: 0.95rem;
-  color: #5a7a7c;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Selects dans le card-header */
+.card-header .form-select-sm {
+  font-size: 0.82rem;
+  border-radius: 8px;
+  border-color: var(--border-color);
+  background-color: var(--bg-muted);
+  color: var(--text-primary);
+  padding: 0.3rem 2rem 0.3rem 0.75rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.card-header .form-select-sm:focus {
+  border-color: var(--main-color);
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.12);
+  outline: none;
+}
+
+/* ── Carte filtres table ────────────────────────────────────────── */
+.card.p-3 {
+  padding: 1.25rem !important;
+}
+
+.card.p-3 .form-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 0.3rem;
+}
+
+.card.p-3 .form-select,
+.card.p-3 .form-control {
+  border-radius: 8px;
+  font-size: 0.88rem;
+  border-color: var(--border-color);
+  background: var(--bg-muted);
+}
+
+.card.p-3 .form-select:focus,
+.card.p-3 .form-control:focus {
+  border-color: var(--main-color);
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.12);
+}
+
+.card.p-3 .btn-primary {
+  font-size: 0.88rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* ── Tableau historique loyers ─────────────────────────────────── */
+.table {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.table thead th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-color);
+  padding: 0.85rem 1.25rem;
+  background: var(--bg-muted);
+}
+
+.table tbody td {
+  padding: 0.8rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > td {
+  background: rgba(0, 119, 182, 0.025);
+}
+
+.table-hover tbody tr:hover td {
+  background: rgba(0, 119, 182, 0.05);
+}
+
+.table-light th {
+  background: var(--bg-muted) !important;
+}
+
+/* ── Pagination ────────────────────────────────────────────────── */
+.d-flex.justify-content-between.align-items-center.mt-3 {
+  padding: 0.75rem 1.25rem 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.d-flex.justify-content-between.align-items-center.mt-3 span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.btn-outline-secondary {
+  font-size: 0.82rem;
+  border-radius: 8px;
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.35rem 1rem;
+  transition: all var(--transition);
+}
+
+.btn-outline-secondary:hover:not(:disabled) {
+  background: var(--main-color);
+  border-color: var(--main-color);
+  color: #fff;
+}
+
+.btn-outline-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Chargement ─────────────────────────────────────────────────── */
+.text-muted {
+  color: var(--text-muted) !important;
+  font-size: 0.88rem;
+}
+
+/* ── Animation d'entrée ────────────────────────────────────────── */
+.metric-card,
+.card {
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+.row .col-md-4:nth-child(1) .metric-card { animation-delay: 0.05s; }
+.row .col-md-4:nth-child(2) .metric-card { animation-delay: 0.10s; }
+.row .col-md-4:nth-child(3) .metric-card { animation-delay: 0.15s; }
+.row .col-md-4:nth-child(4) .metric-card { animation-delay: 0.20s; }
+.row .col-md-4:nth-child(5) .metric-card { animation-delay: 0.25s; }
+.row .col-md-4:nth-child(6) .metric-card { animation-delay: 0.30s; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .content {
+    padding: 1rem 1rem 2rem;
+  }
+
+  .content h1 {
+    font-size: 1.35rem;
+  }
+
+  .metric-card h3 {
+    font-size: 1.35rem;
+  }
+
+  .card-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
 }

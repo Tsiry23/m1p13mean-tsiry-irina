@@ -1,10 +1,204 @@
-#container {
-  --main-color: #0077B6;
-  margin-left: 100px;
+/* ================================================================
+   global.css — Styles partagés par toutes les pages
+   Palette : https://coolors.co/palette/03045e-0077b6-00b4d8-90e0ef-caf0f8
+   ================================================================ */
+
+/* ── Variables globales ────────────────────────────────────────── */
+:root, #container, #sidebar {
+  --main-color:       #0077B6;
+  --main-color-dark:  #03045E;
+  --main-color-light: #00B4D8;
+  --main-color-pale:  #CAF0F8;
+
+  --bg-page:    #f0f4f8;
+  --bg-card:    #ffffff;
+  --bg-muted:   #f7fafc;
+
+  --text-primary:   #0d1b2a;
+  --text-secondary: #4a6580;
+  --text-muted:     #8fa3b8;
+
+  --border-color:   #e2eaf2;
+  --border-radius:  14px;
+  --border-radius-sm: 10px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 119, 182, 0.07);
+  --shadow-md: 0 6px 20px rgba(0, 119, 182, 0.12);
+  --shadow-lg: 0 12px 40px rgba(0, 119, 182, 0.16);
+
+  --transition: 0.22s ease;
 }
 
-@media screen and (max-width: 768px) {
+/* ── Reset & base ──────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+}
+
+/* ── Layout principal ──────────────────────────────────────────── */
+#container {
+  --main-color: #0077B6;
+  margin-left: 100px;   /* compense la sidebar collapsed (80px) + gap (20px) */
+  min-height: 100vh;
+  transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
   #container {
-    margin-left: 0px;
+    margin-left: 0;
   }
+}
+
+/* ── Cards ─────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+/* ── Boutons primaires ─────────────────────────────────────────── */
+.btn-primary {
+  background-color: var(--main-color);
+  border-color: var(--main-color);
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background var(--transition), transform 0.15s, box-shadow var(--transition);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--main-color-dark);
+  border-color: var(--main-color-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.35);
+}
+
+.btn-outline-primary {
+  color: var(--main-color);
+  border-color: var(--main-color);
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all var(--transition);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--main-color);
+  border-color: var(--main-color);
+}
+
+/* ── Formulaires ───────────────────────────────────────────────── */
+.form-control {
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-control:focus {
+  border-color: var(--main-color);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.12);
+  outline: none;
+}
+
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Tableaux ──────────────────────────────────────────────────── */
+.table {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.table thead th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-color);
+  padding: 0.85rem 1rem;
+}
+
+.table tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 119, 182, 0.04);
+}
+
+.table-light th {
+  background: var(--bg-muted) !important;
+}
+
+/* ── Badges & états ────────────────────────────────────────────── */
+.badge-success {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  padding: 0.3em 0.7em;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  padding: 0.3em 0.7em;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* ── Titre de page ─────────────────────────────────────────────── */
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+/* ── Alert ─────────────────────────────────────────────────────── */
+.alert {
+  border-radius: var(--border-radius-sm);
+  border: none;
+  font-size: 0.88rem;
+}
+
+.alert-danger {
+  background: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
 }

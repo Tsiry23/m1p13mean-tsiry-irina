@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Paiement = require("../models/Paiement");
+const Utilisateur = require("../models/Utilisateur");
 
 const authMiddleware = require("../middleware/auth");
 
@@ -33,6 +34,50 @@ router.get("/", authMiddleware, async (req, res) => {
 router.get("/search", authMiddleware, async (req, res) => {
   try {
     const { id_boutique, dateDebut, dateFin } = req.query;
+
+    const filter = {};
+
+    // 🎯 Filtre par boutique
+    if (id_boutique) {
+      filter.id_boutique = id_boutique;
+    }
+
+    // 📅 Filtre par date
+    if (dateDebut || dateFin) {
+      filter.date_ = {};
+
+      if (dateDebut) {
+        filter.date_.$gte = new Date(dateDebut);
+      }
+
+      if (dateFin) {
+        // inclure toute la journée de fin
+        const endDate = new Date(dateFin);
+        endDate.setHours(23, 59, 59, 999);
+        filter.date_.$lte = endDate;
+      }
+    }
+
+    const paiements = await Paiement
+      .find(filter)
+      .populate("id_boutique")
+      .sort({ date_: -1 }); // plus récents en premier
+
+    res.json(paiements);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/boutique/search", authMiddleware, async (req, res) => {
+  try {
+    const { dateDebut, dateFin } = req.query;
+
+    let currentUser = await Utilisateur.findById(req.user.id);
+    
+    let id_boutique = currentUser.id_boutique;
 
     const filter = {};
 

@@ -1,50 +1,264 @@
-.layout {
+/* ================================================================
+   dashboard.css — Styles propres au tableau de bord
+   Dépend de global.css (variables :root)
+   ================================================================ */
+
+/* ── Layout page dashboard ─────────────────────────────────────── */
+.content {
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem 2rem 3rem;
+  background: var(--bg-page);
   min-height: 100vh;
 }
 
-.content {
-  flex: 1;
-  margin-left: 80px; /* largeur sidebar fermée, doit correspondre à --sidebar-w-closed */
+/* ── En-tête page ──────────────────────────────────────────────── */
+.dashboard-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  text-align: center;
-  padding: 32px;
-  margin-bottom: 64px;
-  background: #f0f4f5;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .content h1 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #1a2e2f;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  margin: 0 0 1.75rem;
 }
 
-.content p {
-  font-size: 0.95rem;
-  color: #5a7a7c;
+/* ── Filtres dates ─────────────────────────────────────────────── */
+.filter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
 }
 
+.filter-card .form-control-sm {
+  border-radius: 8px;
+  font-size: 0.87rem;
+}
+
+.filter-card .btn-primary {
+  font-size: 0.87rem;
+  padding: 0.38rem 1.1rem;
+  border-radius: 8px;
+}
+
+/* ── KPI Cards ─────────────────────────────────────────────────── */
 .metric-card {
-  border-radius: 12px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
+  border: none !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-md) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.metric-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  pointer-events: none;
 }
 
 .metric-card:hover {
   transform: translateY(-3px);
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.metric-card .card-body {
+  padding: 1.25rem 1.4rem 1.4rem;
 }
 
 .metric-card h6 {
-  font-size: 0.85rem;
-  font-weight: 600;
-  opacity: 0.9;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+  margin-bottom: 0.6rem;
 }
 
 .metric-card h3 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   margin: 0;
+  line-height: 1;
+}
+
+/* Couleurs personnalisées pour chaque KPI */
+.metric-card.bg-primary {
+  background: linear-gradient(135deg, #0077B6 0%, #03045E 100%) !important;
+}
+
+.metric-card.bg-success {
+  background: linear-gradient(135deg, #059669 0%, #065f46 100%) !important;
+}
+
+.metric-card.bg-info {
+  background: linear-gradient(135deg, #00B4D8 0%, #0077B6 100%) !important;
+}
+
+.metric-card.bg-warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  color: #fff !important;
+}
+
+.metric-card.bg-warning h6,
+.metric-card.bg-warning h3 {
+  color: #fff !important;
+}
+
+/* ── Graphiques ────────────────────────────────────────────────── */
+.chart-card {
+  border-radius: var(--border-radius) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-sm) !important;
+  overflow: hidden;
+}
+
+.chart-card .card-header {
+  padding: 1rem 1.25rem;
+  background: transparent;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chart-card .card-header h5 {
+  font-size: 0.95rem;
   font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Groupe de boutons onglets */
+.btn-group .btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.85rem;
+  border-radius: 8px !important;
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+  transition: all 0.18s ease;
+}
+
+.btn-group .btn-primary {
+  background: var(--main-color) !important;
+  border-color: var(--main-color) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0,119,182,0.3);
+}
+
+.btn-group .btn-outline-primary {
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+  background: transparent;
+}
+
+.btn-group .btn-outline-primary:hover {
+  background: rgba(0,119,182,0.06);
+  color: var(--main-color);
+  border-color: var(--main-color);
+}
+
+/* ── Tableaux produits ─────────────────────────────────────────── */
+.products-card {
+  border-radius: var(--border-radius) !important;
+  border: 1px solid var(--border-color) !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.products-card .card-header {
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 0.9rem 1.25rem;
+  background: transparent;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Badges stock */
+.table-danger td {
+  background: rgba(239,68,68,0.06) !important;
+  color: #b91c1c;
+}
+
+.table-warning td {
+  background: rgba(245,158,11,0.07) !important;
+  color: #92400e;
+}
+
+/* Valeur numérique en gras dans les cellules */
+.table tbody td.fw-bold {
+  font-weight: 700;
+}
+
+/* ── Chargement ────────────────────────────────────────────────── */
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--main-color);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Animation d'entrée des éléments ──────────────────────────── */
+.metric-card,
+.chart-card,
+.products-card {
+  animation: fadeSlideUp 0.4s ease both;
+}
+
+.row .col-md-3:nth-child(1) .metric-card { animation-delay: 0.05s; }
+.row .col-md-3:nth-child(2) .metric-card { animation-delay: 0.10s; }
+.row .col-md-3:nth-child(3) .metric-card { animation-delay: 0.15s; }
+.row .col-md-3:nth-child(4) .metric-card { animation-delay: 0.20s; }
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .content {
+    padding: 1rem 1rem 2rem;
+  }
+
+  .content h1 {
+    font-size: 1.35rem;
+  }
+
+  .metric-card h3 {
+    font-size: 1.35rem;
+  }
 }
