@@ -21,7 +21,7 @@
 
               <div class="mb-3">
                 <label class="form-label">Nom du produit</label>
-                <input type="text" class="form-control" [value]="currentProduit.nom" disabled>
+                <input type="text" class="form-control" [value]="currentProduit.nom" [disabled]="isEntreeMode">
               </div>
 
               <div class="mb-3" *ngIf="!isEntreeMode">
@@ -48,7 +48,7 @@
               <!-- Info quantité actuelle (toujours visible) -->
               <div class="mb-3">
                 <label class="form-label">Quantité actuelle</label>
-                <input type="number" class="form-control" [value]="originalQtActuel ?? currentProduit.qt_actuel" disabled>
+                <input type="number" class="form-control" [value]="originalQtActuel ?? currentProduit.qt_actuel" [disabled]="isEntreeMode">
               </div>
 
               <!-- Champs modification (cachés ou désactivés en entrée) -->

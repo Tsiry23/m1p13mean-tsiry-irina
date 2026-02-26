@@ -13,7 +13,6 @@ var app = express();
 /* =========================
    ENV VARIABLES
 ========================= */
-const PORT = process.env.PORT || 3000;
 const FRONT_URL = process.env.URL_HOST_FRONT;
 const MONGO_URI = process.env.MONGO_URI;
 
