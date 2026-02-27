@@ -7,13 +7,14 @@ const cors = require("cors");
 require('dotenv').config();
 
 const mongoose = require('mongoose');
+const config = require('./config/config')
 
 var app = express();
 
 /* =========================
    ENV VARIABLES
 ========================= */
-const FRONT_URL = process.env.URL_HOST_FRONT;
+const FRONT_URL = config.urls.frontend;
 const MONGO_URI = process.env.MONGO_URI;
 
 /* =========================
