@@ -4,7 +4,7 @@ const config = {
       'https://m1p13mean-tsiry-irina-1.onrender.com',
 
     frontend:
-      'm1p13mean-tsiry-irina.vercel.app',
+      'https://m1p13mean-tsiry-irina.vercel.app',
   },
 };
 
