@@ -1,0 +1,14 @@
+/* Si le sidebar fait ~250px de large par exemple */
+.page-wrapper.ms-sidebar {
+  margin-left: 100px;     /* adapte à la largeur réelle de ton sidebar */
+  width: calc(100% - 100px);
+  transition: margin-left 0.3s ease;   /* optionnel : animation si sidebar collapsible */
+}
+
+/* Si le sidebar est responsive et disparaît sur mobile */
+@media (max-width: 992px) {
+  .page-wrapper.ms-sidebar {
+    margin-left: 0;
+    width: 100%;
+  }
+}

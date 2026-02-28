@@ -1,0 +1,66 @@
+<!-- Bouton burger (mobile only) -->
+<button class="mobile-toggle" (click)="toggleSidebar()">
+  <i class="bi bi-list"></i>
+</button>
+
+<nav id="sidebar" [class.active]="isActive">
+
+  <!-- Logo / Toggle desktop -->
+  <div class="sidebar-logo desktop-only" (click)="toggleSidebar()" title="Réduire / Développer">
+    <div class="sidebar-logo-icon">
+      <i class="bi bi-shop"></i>
+    </div>
+    <span class="sidebar-logo-text">Mall Manager</span>
+  </div>
+
+  <!-- Header mobile avec bouton fermer -->
+  <div class="mobile-header">
+    <span class="mobile-title">Mall Manager</span>
+    <button class="close-btn" (click)="toggleSidebar()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="sidebar-inner">
+    <ul class="nav-list">
+
+      <!-- Dashboard -->
+      <li>
+        <a routerLink="/admin-boutique" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
+           class="nav-link" (click)="closeOnMobile()">
+          <i class="bi bi-grid-1x2-fill nav-icon"></i>
+          <span class="nav-link-text">Dashboard</span>
+        </a>
+      </li>
+
+      <!-- Vente -->
+      <li>
+        <a routerLink="/admin-boutique/vente" routerLinkActive="active-link"
+           class="nav-link" (click)="closeOnMobile()">
+          <i class="bi bi-building nav-icon"></i>
+          <span class="nav-link-text">Vente</span>
+        </a>
+      </li>
+
+      <!-- Produits -->
+      <li>
+        <a routerLink="/admin-boutique/produit" routerLinkActive="active-link"
+           class="nav-link" (click)="closeOnMobile()">
+          <i class="bi bi-box-seam nav-icon"></i>
+          <span class="nav-link-text">Produits</span>
+        </a>
+      </li>
+
+      <!-- Paiements -->
+      <li>
+        <a routerLink="/admin-boutique/paiements" routerLinkActive="active-link"
+           class="nav-link" (click)="closeOnMobile()">
+          <i class="bi bi-credit-card nav-icon"></i>
+          <span class="nav-link-text">Paiements</span>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+
+</nav>

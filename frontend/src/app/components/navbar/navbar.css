@@ -1,0 +1,66 @@
+/* NAVBAR par défaut */
+.navbar {
+  height: 90px;
+  background: transparent;
+  transition: 0.3s ease;
+}
+
+/* Après scroll */
+.navbar.scrolled {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Couleur texte */
+.navbar .nav-link {
+  position: relative;
+  color: white;
+  margin: 0 15px;
+  transition: 0.3s;
+}
+
+/* Après scroll */
+.navbar.scrolled .nav-link {
+  color: black;
+}
+
+/* Hover underline */
+.navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  width: 0;
+  height: 4px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.navbar .nav-link:hover::after {
+  width: 100%;
+}
+
+/* Brand */
+.navbar .navbar-brand {
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar.scrolled .navbar-brand {
+  color: black;
+}
+
+/* ====== AJUSTEMENTS POUR MOBILE ====== */
+@media (max-width: 991.98px) { /* correspond à lg breakpoint de bootstrap */
+  .navbar {
+    height: auto; /* hauteur automatique pour le toggle */
+    padding: 30px;
+  }
+
+  /* Supprimer l'animation underline pour mobile */
+  .navbar .nav-link::after {
+    display: none;
+  }
+}

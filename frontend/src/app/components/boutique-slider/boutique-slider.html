@@ -1,0 +1,19 @@
+<section id="boutiques" class="container my-5">
+  <h2 class="text-center mb-4">Nos Boutiques</h2>
+
+  <div class="boutique-scroll d-flex overflow-auto">
+    <div
+      class="boutique-card me-3"
+      *ngFor="let boutique of boutiques"
+    >
+      <img
+        [src]="'/img/' + boutique.image"
+        [alt]="boutique.nom"
+      >
+      <div class="card-body">
+        <h5 class="card-title">{{ boutique.nom }}</h5>
+        <p class="card-text">{{ boutique.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>

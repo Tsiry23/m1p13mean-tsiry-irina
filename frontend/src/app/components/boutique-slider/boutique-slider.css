@@ -1,0 +1,65 @@
+.boutique-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 15px; /* un peu plus d’espace pour scrollbar */
+  gap: 20px; /* espace entre les cartes */
+  padding-left: 10px; /* petit padding à gauche */
+  padding-right: 10px;
+}
+
+.boutique-card {
+  flex: 0 0 auto;
+  width: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* Pour que le scale ne soit pas coupé */
+.boutique-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.boutique-card:hover {
+  /* transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2); */
+}
+
+.boutique-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.boutique-card .card-body {
+  padding: 15px;
+}
+
+.boutique-card h5 {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.boutique-card p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Scrollbar discrète */
+.boutique-scroll::-webkit-scrollbar {
+  height: 0px;
+}
+
+.boutique-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+.boutique-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
