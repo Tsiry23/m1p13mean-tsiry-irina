@@ -21,7 +21,7 @@
 
               <div class="mb-3">
                 <label class="form-label">Nom du produit</label>
-                <input type="text" class="form-control" [value]="currentProduit.nom" [disabled]="isEntreeMode">
+                <input type="text" class="form-control" [(ngModel)]="currentProduit.nom" name="nom" [disabled]="isEntreeMode">
               </div>
 
               <div class="mb-3" *ngIf="!isEntreeMode">
@@ -39,24 +39,21 @@
                        name="quantiteAjout"
                        min="1"
                        required
+                       [disabled]="!isEntreeMode"
                        placeholder="Entrez la quantité reçue">
                 <small class="form-text text-success mt-2 d-block">
                   Nouvelle quantité prévue : <strong>{{ nouvelleQuantiteCalculee }}</strong>
                 </small>
               </div>
 
-              <!-- Info quantité actuelle (toujours visible) -->
-              <div class="mb-3">
+              <!-- Info quantité actuelle -->
+              <div class="mb-3" *ngIf="!isEntreeMode">
                 <label class="form-label">Quantité actuelle</label>
-                <input type="number" class="form-control" [value]="originalQtActuel ?? currentProduit.qt_actuel" [disabled]="isEntreeMode">
+                <input type="number" class="form-control" [(ngModel)]="quantiteAjout" name="quantiteAjout" [disabled]="isEntreeMode">
               </div>
 
               <!-- Champs modification (cachés ou désactivés en entrée) -->
               <div class="row" *ngIf="!isEntreeMode">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label">En cours de commande</label>
-                  <input type="number" class="form-control" [(ngModel)]="currentProduit.qt_en_cours_commande" name="qt_en_cours" min="0">
-                </div>
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Prix actuel (Ar)</label>
                   <input type="number" step="100" class="form-control" [(ngModel)]="currentProduit.prix_actuel" name="prix_actuel" min="0">
@@ -105,7 +102,7 @@
           <tbody>
             <tr *ngFor="let p of produits">
               <td>
-                <img *ngIf="p.image" [src]="apiUrl + p.image" alt="{{p.nom}}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;">
+                <img *ngIf="p.image" [src]="p.image" alt="{{p.nom}}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;">
                 <span *ngIf="!p.image" class="text-muted">—</span>
               </td>
               <td>{{ p.nom }}</td>

@@ -1,27 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const Boutique = require("../models/Boutique");
+const Role = require("../models/Role");
 const multer = require("multer");
 const path = require("path");
 
 const authMiddleware = require("../middleware/auth");
 
-const storage = multer.diskStorage({
-  destination: "./uploads/boutiques/",
-  filename: (req, file, cb) => {
-    const uniqueSuffix =
-      Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
+const { upload, uploadToCloudinary } = require('../middleware/uploadToCloudinary');
+const Utilisateur = require("../models/Utilisateur");
 
-const upload = multer({ storage });
+
 
 // Créer une boutique
 router.post(
   "/",
   authMiddleware,
-  upload.single("image"),
+   upload.single('image'),uploadToCloudinary,
   async (req, res) => {
     try {
       // ==============================
@@ -44,15 +39,60 @@ router.post(
 
       // image (optionnelle)
       if (req.file) {
-        boutiqueData.image = `/uploads/boutiques/${req.file.filename}`;
+        // boutiqueData.image = `/uploads/boutiques/${req.file.filename}`;
+        boutiqueData.image = req.cloudinary.url;
       }
 
       // ==============================
       // 2️⃣ Création & sauvegarde
       // ==============================
+      const email = req.body.email;   
+      console.log(email)
+
+      if (!email) {
+        return res.status(400).json({ 
+          message: "L'email de l'utilisateur destinataire est requis" 
+        });
+      }
+
+      const user = await Utilisateur.findOne({ email });
+
+      if (!user) {
+        return res.status(404).json({ 
+          message: `Utilisateur avec l'email ${email} introuvable` 
+        });
+      }
+
+
+      // ==============================
+      // 3️⃣ Création & sauvegarde de la boutique
+      // ==============================
       const boutique = new Boutique(boutiqueData);
       await boutique.save();
 
+
+      // ==============================
+      // 4️⃣ Attribution rôle + boutique à l’utilisateur
+      // ==============================
+      const role = await Role.findOne({ nom: "admin de boutique" });
+
+
+      if (!role) {
+        // Option A : rollback (supprimer la boutique créée)
+        await Boutique.findByIdAndDelete(boutique._id);
+        return res.status(500).json({ 
+          message: "Rôle 'admin de boutique' introuvable dans la base" 
+        });
+      }
+
+      // Mise à jour de l’utilisateur
+      user.id_role    = role._id;
+      user.id_boutique = boutique._id;
+
+        console.log("hey saving")
+      await user.save();   // ← très important !
+
+        console.log("hey final")
       // ==============================
       // 3️⃣ Réponse
       // ==============================
@@ -60,6 +100,10 @@ router.post(
 
     } catch (error) {
       console.error(error);
+      console.error("ERREUR CRÉATION BOUTIQUE :", error);
+      console.error("Body reçu :", req.body);
+      console.error("Fichier reçu :", req.file);
+      console.error("Cloudinary :", req.cloudinary);
       res.status(400).json({
         message: error.message || "Erreur lors de la création de la boutique",
       });

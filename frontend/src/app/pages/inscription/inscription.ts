@@ -9,9 +9,9 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-inscription',
   standalone: true,
-  imports: [FormsModule, RouterLink, CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './inscription.html',
-  styleUrl: './inscription.css',
+  styleUrls: ['./inscription.css', '../login/login.css'],
 })
 export class InscriptionComponent {
   nom: string = '';

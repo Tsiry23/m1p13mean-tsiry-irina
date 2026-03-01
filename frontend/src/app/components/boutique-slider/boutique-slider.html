@@ -7,7 +7,7 @@
       *ngFor="let boutique of boutiques"
     >
       <img
-        [src]="'/img/' + boutique.image"
+        [src]="boutique.image"
         [alt]="boutique.nom"
       >
       <div class="card-body">
