@@ -157,7 +157,7 @@ router.post('/notify-arrivage', async (req, res) => {
             <h3 style="color: #e74c3c; margin: 20px 0 10px;">${produit.nom}</h3>
             
             ${produit.image ? `
-            <img src="${ URL_HOST_BACK + produit.image}" alt="${produit.nom}" 
+            <img src="${ produit.image}" alt="${produit.nom}" 
                 style="max-width: 100%; height: auto; border-radius: 8px; margin: 15px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
             ` : '<p style="color: #777;">[Image du produit non disponible]</p>'}
 

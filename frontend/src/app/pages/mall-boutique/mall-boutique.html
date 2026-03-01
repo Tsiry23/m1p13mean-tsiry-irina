@@ -85,6 +85,11 @@
               </div>
 
               <div class="mb-3">
+                <label class="form-label">Email utilisateur</label>
+                <input class="form-control" [(ngModel)]="currentBoutique.email" name="email" required />
+              </div>
+
+              <div class="mb-3">
                 <label class="form-label">Description</label>
                 <textarea
                   class="form-control"
@@ -169,7 +174,7 @@
               <td>
                 <img
                   *ngIf="b.image"
-                  [src]="getImageUrl(b.image)"
+                  [src]="b.image"
                   style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px"
                 />
               </td>

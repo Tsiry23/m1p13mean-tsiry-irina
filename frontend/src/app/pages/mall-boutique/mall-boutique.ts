@@ -34,7 +34,8 @@ export class MallBoutique implements OnInit {
     nom_emplacement: '',
     description: '',
     taille_m2: 0,
-    loyer: 0
+    loyer: 0,
+    email: ''
   };
 
   selectedFile?: File;
@@ -81,15 +82,67 @@ export class MallBoutique implements OnInit {
   saveBoutique() {
     this.loading = true;
 
+    console.log('Données envoyées :', this.currentBoutique);
+
     this.boutiqueService.addBoutique(this.currentBoutique, this.selectedFile).subscribe({
-      next: () => {
+      next: (response) => {
         this.loading = false;
         this.showForm = false;
         this.loadBoutiques();
-
         this.cdr.detectChanges();
+
+        // Succès : alerte ou toast de confirmation
+        alert('Boutique créée avec succès !');
+        // Ou mieux : this.toastr.success('Boutique créée avec succès');
       },
-      error: () => this.loading = false
+      error: (err: any) => {
+        this.loading = false;
+
+        let errorMessage = 'Une erreur est survenue lors de la création de la boutique.';
+
+        // On essaie de récupérer le message précis envoyé par le backend
+        if (err.error && err.error.message) {
+          errorMessage = err.error.message;
+        } else if (err.message) {
+          errorMessage = err.message;
+        }
+
+        // Gestion par code HTTP (très utile pour ton cas)
+        switch (err.status) {
+          case 400:
+            errorMessage = err.error?.message || 'Données invalides (champs manquants ou incorrects)';
+            break;
+          case 401:
+            errorMessage = 'Non authentifié – Veuillez vous reconnecter';
+            // Option : this.router.navigate(['/login']);
+            break;
+          case 403:
+            errorMessage = 'Accès interdit – Vous n\'avez pas les droits nécessaires';
+            break;
+          case 404:
+            errorMessage = err.error?.message || 'Ressource introuvable (utilisateur ou rôle non trouvé)';
+            break;
+          case 500:
+            errorMessage = 'Erreur serveur interne – Contactez l\'administrateur';
+            break;
+          case 0:
+            errorMessage = 'Impossible de contacter le serveur (problème réseau ou CORS)';
+            break;
+          default:
+            errorMessage += ` (code ${err.status})`;
+        }
+
+        // Affichage final
+        alert(errorMessage);  // ← alerte basique
+
+        // Alternative recommandée si tu as une lib de notification :
+        // this.toastr.error(errorMessage, 'Erreur');
+        // Ou avec Angular Material Snackbar :
+        // this.snackBar.open(errorMessage, 'Fermer', { duration: 8000, panelClass: ['error-snackbar'] });
+
+        console.error('Erreur complète :', err);
+        this.cdr.detectChanges();
+      }
     });
   }
 

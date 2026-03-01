@@ -33,7 +33,8 @@ router.post('/login', async (req, res) => {
     );
     let rep = {
       success: true,
-      token
+      token,
+      role : user.id_role.nom
     };
 
     if (user.id_role.nom === 'client') {

@@ -21,6 +21,7 @@ export class BoutiqueService {
   addBoutique(boutique: Boutique, file?: File): Observable<any> {
     const formData = new FormData();
     formData.append('nom', boutique.nom);
+    formData.append('email', boutique.email?.trim() || '');
     formData.append('description', boutique.description || '');
     formData.append('taille_m2', (boutique.taille_m2 || 0).toString());
     formData.append('loyer', (boutique.loyer || 0).toString());
