@@ -16,6 +16,15 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
+// ➕ Créer plusieurs paiements (annuel / batch)
+router.post("/batch", authMiddleware, async (req, res) => {
+  try {
+    const paiements = await Paiement.insertMany(req.body);
+    res.status(201).json(paiements);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
 // 📄 Lire tous les paiements
 router.get("/", authMiddleware, async (req, res) => {

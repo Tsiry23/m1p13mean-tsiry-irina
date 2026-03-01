@@ -63,6 +63,31 @@ router.get("/init", async (req, res) => {
   }
 });
 
+// 🔍 Récupérer l'historique de loyer par boutique
+router.get("/search", authMiddleware, async (req, res) => {
+  try {
+    const { id_boutique } = req.query;
+
+    if (!id_boutique) {
+      return res.status(400).json({
+        message: "id_boutique requis"
+      });
+    }
+
+    const histos = await HistoLoyer
+      .find({ id_boutique })
+      .sort({ date_changement: 1 }); // chronologique
+
+    res.json(histos);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Erreur récupération historique loyer"
+    });
+  }
+});
+
 // Créer un historique de loyer
 router.post("/", authMiddleware, async (req, res) => {
   try {

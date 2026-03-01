@@ -148,4 +148,25 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.patch("/migrate/init", async (req, res) => {
+  try {
+    const result = await Boutique.updateMany(
+      { active: { $exists: false } },
+      {
+        $set: {
+          active: true,
+          debut_contrat: new Date("2026-01-01"),
+          fin_contrat: null,
+        },
+      }
+    );
+
+    res.json({
+      message: `${result.modifiedCount} boutique(s) migrée(s) avec succès`,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;

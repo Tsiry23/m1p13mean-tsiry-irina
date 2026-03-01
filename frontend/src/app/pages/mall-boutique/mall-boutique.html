@@ -1,71 +1,66 @@
 <div class="layout" id="container">
   <app-mall-admin-sidebar></app-mall-admin-sidebar>
 
-<!-- Modal Paiement -->
-<div
-  class="modal fade show"
-  tabindex="-1"
-  *ngIf="showPaiementModal"
-  style="display: block; background: rgba(0, 0, 0, 0.5)"
->
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          Enregistrer un paiement – {{ selectedBoutique?.nom }}
-        </h5>
-        <button type="button" class="btn-close" (click)="closePaiementModal()"></button>
-      </div>
+  <!-- Modal Paiement -->
+  <div
+    class="modal fade show"
+    tabindex="-1"
+    *ngIf="showPaiementModal"
+    style="display: block; background: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-wide">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Enregistrer un paiement – {{ selectedBoutique?.nom }}</h5>
+          <button type="button" class="btn-close" (click)="closePaiementModal()"></button>
+        </div>
 
-      <div class="modal-body">
-        <form>
-          <!-- Montant -->
+        <div class="modal-body">
           <div class="mb-3">
-            <label class="form-label">Montant à payer (Ar)</label>
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="paiement.total_a_payer"
-              name="total_a_payer"
-              required
-            />
+            <label class="form-label">Année</label>
+            <select class="form-select" [(ngModel)]="selectedYear" (change)="loadPaiementsAnnee()">
+              <option *ngFor="let y of getAnneesDisponibles()" [value]="y">{{ y }}</option>
+            </select>
           </div>
 
-          <!-- Période (mois concerné) -->
-          <div class="mb-3">
-            <label class="form-label">Période (mois concerné)</label>
-            <input
-              type="date"
-              class="form-control"
-              [(ngModel)]="paiement.periode"
-              name="periode"
-              required
-            />
-          </div>
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr>
+                <th>Mois</th>
+                <th>Montant (Ar)</th>
+                <th>Date de paiement</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let l of lignesPaiement">
+                <td>{{ l.periode | date: 'MMMM yyyy' : '' : 'fr' }}</td>
 
-          <!-- Date réelle du paiement -->
-          <div class="mb-3">
-            <label class="form-label">Date et heure du paiement</label>
-            <input
-              type="datetime-local"
-              class="form-control"
-              [(ngModel)]="paiement.date_"
-              name="date_"
-              required
-            />
-          </div>
-        </form>
-      </div>
+                <td>
+                  <input class="form-control" type="number" [value]="l.total_a_payer" disabled />
+                </td>
 
-      <div class="modal-footer">
-        <button class="btn btn-secondary" (click)="closePaiementModal()">Annuler</button>
-        <button class="btn btn-primary" (click)="addPaiement()" [disabled]="loading">
-          Enregistrer le paiement
-        </button>
+                <td>
+                  <input
+                    class="form-control"
+                    type="datetime-local"
+                    [(ngModel)]="l.date_"
+                    [disabled]="l.dejaPaye"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closePaiementModal()">Annuler</button>
+          <button class="btn btn-primary" (click)="validerPaiements()" [disabled]="loading">
+            Enregistrer les paiements
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
   <main class="content p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
