@@ -49,7 +49,7 @@
               <!-- Info quantité actuelle -->
               <div class="mb-3" *ngIf="!isEntreeMode">
                 <label class="form-label">Quantité actuelle</label>
-                <input type="number" class="form-control" [(ngModel)]="quantiteAjout" name="quantiteAjout" [disabled]="isEntreeMode">
+                <input type="number" class="form-control" [(ngModel)]="currentProduit.qt_actuel" name="qt_actuel" [disabled]="isEntreeMode">
               </div>
 
               <!-- Champs modification (cachés ou désactivés en entrée) -->

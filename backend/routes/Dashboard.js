@@ -106,14 +106,14 @@ router.get("/paiements/evolution", async (req, res) => {
 
     const year = parseInt(annee, 10);
 
-    const startOfYear = new Date(year, 0, 1);
-    const endOfYear = new Date(year + 1, 0, 1);
+    const startOfYear = new Date(Date.UTC(year, 0, 1));
+    const endOfYear = new Date(Date.UTC(year + 1, 0, 1));
 
     // 1️⃣ Match dynamique
     const matchStage = {
       periode: {
-        $gt: startOfYear,
-        $lte: endOfYear,
+        $gte: startOfYear,
+        $lt: endOfYear,
       },
     };
 
