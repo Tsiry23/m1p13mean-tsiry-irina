@@ -137,6 +137,7 @@ export class ProduitComponent implements OnInit {
   }
 
   saveProduit() {
+    console.log("hey");
     if (this.isEditing && this.currentProduit._id) {
       this.produitService.updateProduit(this.currentProduit._id, this.currentProduit, this.selectedFile)
         .subscribe({
@@ -151,6 +152,7 @@ export class ProduitComponent implements OnInit {
           }
         });
     } else {
+      console.log("adding product" + JSON.stringify(this.currentProduit));
       this.produitService.addProduit(this.currentProduit, this.selectedFile)
         .subscribe({
           next: () => {

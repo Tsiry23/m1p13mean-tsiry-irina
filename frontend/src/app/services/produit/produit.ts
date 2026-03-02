@@ -56,23 +56,10 @@ export class ProduitService {
   }
 
   addProduit(produit: Produit, file?: File): Observable<any> {
-    console.log("adding \n");
     const formData = this.createFormData(produit, file);
     const headers = this.getAuthHeaders();
 
-    const ajout$ = this.http.post(this.apiUrl, formData, { headers });
-
-    ajout$.subscribe({
-      next: () => {
-        
-      },
-      error: (err) => {
-        console.error(err);
-        alert("Erreur lors de l'ajout");
-      }
-    });
-
-    return ajout$;   // ← on retourne l'observable original
+    return this.http.post(this.apiUrl, formData, { headers });
   }
 
   updateProduit(id: string, produit: Produit, file?: File): Observable<any> {
