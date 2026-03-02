@@ -18,6 +18,7 @@ export class ProduitComponent implements OnInit {
   showForm = false;
   isEditing = false;
   apiUrl = `${environment.apiBaseUrl}`;
+  loading = false;
 
   currentProduit: Produit = {
     _id: '',
@@ -137,6 +138,7 @@ export class ProduitComponent implements OnInit {
   }
 
   saveProduit() {
+    this.loading = true;
     if (this.isEditing && this.currentProduit._id) {
       this.produitService.updateProduit(this.currentProduit._id, this.currentProduit, this.selectedFile)
         .subscribe({
@@ -144,6 +146,8 @@ export class ProduitComponent implements OnInit {
             this.loadProduits();
             this.closeForm();
             alert('Produit modifié avec succès');
+            this.loading = false;
+            this.cdr.detectChanges();
           },
           error: (err) => {
             console.error(err);
@@ -151,12 +155,16 @@ export class ProduitComponent implements OnInit {
           }
         });
     } else {
+      console.log("adding product" + JSON.stringify(this.currentProduit));
       this.produitService.addProduit(this.currentProduit, this.selectedFile)
         .subscribe({
           next: () => {
             this.loadProduits();
             this.closeForm();
+            this.loading = false;
             alert('Produit ajouté avec succès');
+            this.cdr.detectChanges();
+
           },
           error: (err) => {
             console.error(err);
@@ -168,6 +176,7 @@ export class ProduitComponent implements OnInit {
   }
 
   declareEntreeStock() {
+    this.loading = true;
     if (!this.currentProduit._id) return;
     if (this.quantiteAjout <= 0) {
       alert('Veuillez entrer une quantité positive à ajouter');
@@ -184,6 +193,8 @@ export class ProduitComponent implements OnInit {
           this.notify(this.currentProduit._id);
           this.loadProduits();
           this.closeForm();
+          this.loading = false;
+          this.cdr.detectChanges();
           alert(`Entrée de ${this.quantiteAjout} unités enregistrée. Nouvelle quantité : ${nouvelleQt}`);
         },
         error: (err) => {

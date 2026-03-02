@@ -56,12 +56,10 @@ export class ProduitService {
   }
 
   addProduit(produit: Produit, file?: File): Observable<any> {
-    console.log("adding \n");
     const formData = this.createFormData(produit, file);
     const headers = this.getAuthHeaders();
 
     return this.http.post(this.apiUrl, formData, { headers });
-
   }
 
   updateProduit(id: string, produit: Produit, file?: File): Observable<any> {
