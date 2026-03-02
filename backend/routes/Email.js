@@ -8,9 +8,10 @@ const Boutique = require('../models/Boutique');
 const router = express.Router();
 require('dotenv').config();
 
+const config = require('../config/config')
 
 const URL_HOST_BACK = process.env.URL_HOST_BACK;
-const URL_HOST_FRONT = process.env.URL_HOST_FRONT;
+const URL_HOST_FRONT = config.urls.frontend;
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',

@@ -16,15 +16,15 @@ router.get("/metrics", async (req, res) => {
       : new Date();
 
     const startOfMonth = new Date(
-      periodeParam.getFullYear(),
+      Date.UTC(periodeParam.getFullYear(),
       periodeParam.getMonth(),
-      1,
+      1)
     );
 
     const endOfMonth = new Date(
-      periodeParam.getFullYear(),
+      Date.UTC(periodeParam.getFullYear(),
       periodeParam.getMonth() + 1,
-      1,
+      1)
     );
 
     // 2️⃣ Boutiques
@@ -57,8 +57,8 @@ router.get("/metrics", async (req, res) => {
       {
         $match: {
           periode: {
-            $gt: startOfMonth,
-            $lte: endOfMonth,
+            $gte: startOfMonth,
+            $lt: endOfMonth,
           },
         },
       },
