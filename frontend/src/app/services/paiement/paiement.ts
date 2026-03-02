@@ -119,4 +119,13 @@ export class PaiementService {
       }
     );
   }
+
+  // ➕ Créer plusieurs paiements (batch annuel)
+  createMany(paiements: Paiement[]): Observable<Paiement[]> {
+    return this.http.post<Paiement[]>(
+      `${this.apiUrl}/batch`,
+      paiements,
+      { headers: this.getAuthHeaders() }
+    );
+  }
 }

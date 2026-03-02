@@ -3,12 +3,12 @@ export interface Paiement {
 
   total_a_payer: number;
 
-  periode?: Date | string; // mois concerné
+  periode?: Date | string;
   date_?: Date | string;
 
   en_retard?: boolean;
 
-  id_boutique: string;
+  id_boutique: string | undefined;
 
   createdAt?: Date | string;
   updatedAt?: Date | string;
