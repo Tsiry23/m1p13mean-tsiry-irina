@@ -2,6 +2,86 @@
 
 <div class="page-wrapper">
   <div class="produits-container">
+    <!-- ZONE FILTRES -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div class="row g-3">
+
+          <div class="col-md-4 col-sm-6">
+            <label class="form-label">Nom boutique</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="Contient..." 
+              [(ngModel)]="filtreNomBoutique"
+              (input)="onFilterChange()"
+            >
+          </div>
+
+          <div class="col-md-4 col-sm-6">
+            <label class="form-label">Nom produit</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="Contient..." 
+              [(ngModel)]="filtreNomProduit"
+              (input)="onFilterChange()"
+            >
+          </div>
+
+          <div class="col-md-2 col-sm-6">
+            <label class="form-label">Qté min</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              min="0"
+              [(ngModel)]="filtreQtMin"
+              (input)="onFilterChange()"
+            >
+          </div>
+
+          <div class="col-md-2 col-sm-6">
+            <label class="form-label">Qté max</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              min="0"
+              [(ngModel)]="filtreQtMax"
+              (input)="onFilterChange()"
+            >
+          </div>
+
+          <div class="col-md-2 col-sm-6">
+            <label class="form-label">Prix min (Ar)</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              min="0"
+              [(ngModel)]="filtrePrixMin"
+              (input)="onFilterChange()"
+            >
+          </div>
+
+          <div class="col-md-2 col-sm-6">
+            <label class="form-label">Prix max (Ar)</label>
+            <input 
+              type="number" 
+              class="form-control" 
+              min="0"
+              [(ngModel)]="filtrePrixMax"
+              (input)="onFilterChange()"
+            >
+          </div>
+
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
+              Réinitialiser
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
 
     <!-- Loading -->
     <div *ngIf="loading" class="text-center py-5">
