@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterLink } from '@angular/router';
+import { RouterModule, RouterLink, Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth';
 
 @Component({
   standalone: true,
@@ -12,6 +13,11 @@ import { RouterModule, RouterLink } from '@angular/router';
 export class MallAdminSidebar {
   isActive = false;
   isStockOpen = false;
+
+  constructor(
+      private authService: AuthService,
+      private router: Router,
+    ) {}
 
   toggleSidebar(): void {
     this.isActive = !this.isActive;
@@ -36,6 +42,12 @@ export class MallAdminSidebar {
     if (window.innerWidth <= 768) {
       this.isActive = false;
     }
+  }
+
+  logout () {
+    this.authService.logout();
+
+    this.router.navigate(['/']);
   }
 
   ngOnInit(): void { }

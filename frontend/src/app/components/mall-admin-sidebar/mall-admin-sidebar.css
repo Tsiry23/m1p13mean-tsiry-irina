@@ -350,6 +350,18 @@
 
 .close-btn:hover { color: #fff; }
 
+.logout-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
 @media (max-width: 768px) {
   .mobile-toggle {
     display: flex;
