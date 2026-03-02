@@ -146,7 +146,7 @@ export class ProduitComponent implements OnInit {
             this.loadProduits();
             this.closeForm();
             alert('Produit modifié avec succès');
-            this.loading = true;
+            this.loading = false;
             this.cdr.detectChanges();
           },
           error: (err) => {
@@ -161,7 +161,10 @@ export class ProduitComponent implements OnInit {
           next: () => {
             this.loadProduits();
             this.closeForm();
+            this.loading = false;
             alert('Produit ajouté avec succès');
+            this.cdr.detectChanges();
+
           },
           error: (err) => {
             console.error(err);
@@ -173,6 +176,7 @@ export class ProduitComponent implements OnInit {
   }
 
   declareEntreeStock() {
+    this.loading = true;
     if (!this.currentProduit._id) return;
     if (this.quantiteAjout <= 0) {
       alert('Veuillez entrer une quantité positive à ajouter');
@@ -189,6 +193,8 @@ export class ProduitComponent implements OnInit {
           this.notify(this.currentProduit._id);
           this.loadProduits();
           this.closeForm();
+          this.loading = false;
+          this.cdr.detectChanges();
           alert(`Entrée de ${this.quantiteAjout} unités enregistrée. Nouvelle quantité : ${nouvelleQt}`);
         },
         error: (err) => {
