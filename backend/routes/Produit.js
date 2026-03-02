@@ -44,6 +44,7 @@ router.post("/", authMiddleware, upload.single('image'),uploadToCloudinary, asyn
         qt_actuel: Number(req.body.qt_actuel) || 0,
         qt_en_cours_commande: Number(req.body.qt_en_cours_commande) || 0,
         prix_actuel: Number(req.body.prix_actuel) || 0,
+        description: req.body.description,
         
         id_boutique: user.id_boutique
       };
@@ -140,7 +141,8 @@ async function getGroupByBoutique () {
               qt_en_cours_commande: "$qt_en_cours_commande",
               prix_actuel: "$prix_actuel",
               createdAt: "$createdAt",
-              description: "$description"
+              description: "$description",
+              boutique: { nom: "$boutique.nom" }
             }
           }
         }
