@@ -102,17 +102,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             pointHoverRadius: 6,
             yAxisID: 'yCA',
           },
-          {
-            label: 'Nombre de ventes',
-            data: ventesData,
-            borderColor: '#198754',
-            backgroundColor: 'rgba(25,135,84,0.1)',
-            tension: 0.35,
-            fill: false,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            yAxisID: 'yVentes',
-          }
+         
         ],
       },
       options: {
@@ -123,9 +113,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             callbacks: {
               label: (ctx) => {
                 const val = ctx.parsed.y;
-                return ctx.dataset.yAxisID === 'yCA'
-                  ? `CA : ${val?.toLocaleString()} Ar`
-                  : `Ventes : ${val}`;
+                return `CA : ${val?.toLocaleString()} Ar`;
               }
             }
           }
@@ -136,12 +124,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
             position: 'left',
             beginAtZero: true,
             ticks: { callback: (v) => `${Number(v).toLocaleString()} Ar` }
-          },
-          yVentes: {
-            type: 'linear',
-            position: 'right',
-            beginAtZero: true,
-            grid: { drawOnChartArea: false }
           }
         }
       }

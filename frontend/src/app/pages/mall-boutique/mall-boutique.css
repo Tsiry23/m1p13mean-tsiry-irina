@@ -1,3 +1,4 @@
-/* #container{
-    margin-left: 100px;
-} */
+.modal-wide {
+  max-width: 90%; /* largeur maximale */
+  width: 90%;     /* largeur fixe si nécessaire */
+}

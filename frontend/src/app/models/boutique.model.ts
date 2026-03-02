@@ -2,7 +2,8 @@ export interface Boutique {
   _id?: string;
 
   nom: string;
-  nom_emplacement?: string;
+  
+  email?: string;
 
   description?: string | null;
 

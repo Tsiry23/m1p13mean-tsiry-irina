@@ -57,8 +57,8 @@ router.get("/metrics", async (req, res) => {
       {
         $match: {
           periode: {
-            $gte: startOfMonth,
-            $lt: endOfMonth,
+            $gt: startOfMonth,
+            $lte: endOfMonth,
           },
         },
       },
@@ -112,8 +112,8 @@ router.get("/paiements/evolution", async (req, res) => {
     // 1️⃣ Match dynamique
     const matchStage = {
       periode: {
-        $gte: startOfYear,
-        $lt: endOfYear,
+        $gt: startOfYear,
+        $lte: endOfYear,
       },
     };
 

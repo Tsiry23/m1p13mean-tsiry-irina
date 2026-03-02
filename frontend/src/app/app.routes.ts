@@ -12,30 +12,25 @@ import { PaymentHistory } from './pages/payment-history/payment-history';
 import { LoginRedirectGuard } from './guards/login-redirect.guard';
 import { BoutiquePaymentHistory } from './pages/boutique-payment-history/boutique-payment-history';
 import { InscriptionComponent } from './pages/inscription/inscription';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: Home },
-  {
-    path: 'login/boutique',
-    component: Login,
-    canActivate: [LoginRedirectGuard]
-  },
-  {
-    path: 'login/mall',
-    component: Login,
-    canActivate: [LoginRedirectGuard]
-  },
+  { path: 'login/boutique', component: Login, canActivate: [LoginRedirectGuard] },
+  { path: 'login/mall', component: Login, canActivate: [LoginRedirectGuard] },
   { path: 'inscription', component: InscriptionComponent },
   { path: 'login', component: Login },
-  { path: 'login/boutique', component: Login },
-  { path: 'login/mall', component: Login },
-  { path: 'admin-boutique', component: HomeComponent },
-  { path: 'admin-boutique/commande-search', component: CommandeSearch },
-  { path: 'admin-boutique/produit', component: ProduitComponent },
-  { path: 'admin-boutique/vente', component: VenteProduitsComponent },
-  { path: 'admin-boutique/paiements', component: BoutiquePaymentHistory },
   { path: 'produits', component: ListProduits },
-  { path: 'admin-cc', component: MallAdminHome },
-  { path: 'admin-cc/boutiques', component: MallBoutique },
-  { path: 'admin-cc/paiements', component: PaymentHistory },
+
+  // Routes boutique protégées
+  { path: 'admin-boutique', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'admin-boutique/commande-search', component: CommandeSearch, canActivate: [AuthGuard] },
+  { path: 'admin-boutique/produit', component: ProduitComponent, canActivate: [AuthGuard] },
+  { path: 'admin-boutique/vente', component: VenteProduitsComponent, canActivate: [AuthGuard] },
+  { path: 'admin-boutique/paiements', component: BoutiquePaymentHistory, canActivate: [AuthGuard] },
+
+  // Routes mall protégées
+  { path: 'admin-cc', component: MallAdminHome, canActivate: [AuthGuard] },
+  { path: 'admin-cc/boutiques', component: MallBoutique, canActivate: [AuthGuard] },
+  { path: 'admin-cc/paiements', component: PaymentHistory, canActivate: [AuthGuard] },
 ];

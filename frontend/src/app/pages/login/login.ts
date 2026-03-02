@@ -26,6 +26,18 @@ export class Login {
     private cdr: ChangeDetectorRef
   ) { }
 
+  ngOnInit(): void {
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('/login/boutique')) {
+      this.email = 'm1p13meantsiryirina.admin.boutique1@gmail.com';
+      this.mdp = 'adminboutique123';
+    } else if (currentUrl.includes('/login/mall')) {
+      this.email = 'm1p13meantsiryirina.admin@gmail.com';
+      this.mdp = 'admin123';
+    } 
+    this.cdr.detectChanges();
+  }
+
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
@@ -37,9 +49,10 @@ export class Login {
     const currentUrl = this.router.url;
 
     this.auth.login(this.email, this.mdp).subscribe({
-      next: () => {
+      next: (response: any) => {
         this.loading = false;
         this.cdr.detectChanges();
+        
         if (currentUrl.includes('/login/boutique')) {
           this.router.navigate(['/admin-boutique']);
         } else if (currentUrl.includes('/login/mall')) {

@@ -7,18 +7,20 @@ const multer = require('multer');
 const path = require('path');
 const authMiddleware = require("../middleware/auth");
 
+const { upload, uploadToCloudinary } = require('../middleware/uploadToCloudinary');
+
 // Configuration multer
-const storage = multer.diskStorage({
-  destination: './uploads/produits/',
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
+// const storage = multer.diskStorage({
+//   destination: './uploads/produits/',
+//   filename: (req, file, cb) => {
+//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//     cb(null, uniqueSuffix + path.extname(file.originalname));
+//   }
+// });
 
-const upload = multer({ storage });
+// const upload = multer({ storage });
 
-router.post("/", authMiddleware, upload.single('image'), async (req, res) => {
+router.post("/", authMiddleware, upload.single('image'),uploadToCloudinary, async (req, res) => {
     try {
       // 1. Récupérer l'utilisateur connecté via son ID (du token)
       const user = await Utilisateur.findById(req.user.id)
@@ -47,8 +49,11 @@ router.post("/", authMiddleware, upload.single('image'), async (req, res) => {
       };
 
       if (req.file) {
-        produitData.image = `/uploads/produits/${req.file.filename}`;
+        // produitData.image = `/uploads/produits/${req.file.filename}`;
+        produitData.image = req.cloudinary.url;
       }
+
+      console.log(produitData)
 
       // 3. Créer et sauvegarder
       const produit = new Produit(produitData);
@@ -243,11 +248,11 @@ router.put("/:id", authMiddleware, upload.single('image'), async (req, res) => {
     }
     if (req.body.prix_actuel !== undefined)   updateData.prix_actuel = Number(req.body.prix_actuel);
 
-    // Gestion de l'image (remplacement)
-    if (req.file) {
-      updateData.image = `/uploads/produits/${req.file.filename}`;
+    // // Gestion de l'image (remplacement)
+    // if (req.file) {
+    //   updateData.image = `/uploads/produits/${req.file.filename}`;
       
-    }
+    // }
 
     // 4. Mise à jour effective (seulement les champs envoyés)
     const produitMisAJour = await Produit.findByIdAndUpdate(

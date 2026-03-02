@@ -5,6 +5,7 @@ const config = {
 
     frontend:
       'https://m1p13mean-tsiry-irina.vercel.app',
+      // 'http://localhost:4200',
   },
 };
 

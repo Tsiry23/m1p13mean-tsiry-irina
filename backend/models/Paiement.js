@@ -29,6 +29,11 @@ const PaiementSchema = new mongoose.Schema(
       ref: "Boutique",
       required: true,
     },
+
+    nom_boutique: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,
