@@ -8,6 +8,8 @@ import { Navbar } from '../../components/navbar/navbar';
 import { Footer } from '../../components/footer/footer';
 import { environment } from '../../../environments/environment';
 import { Produit } from '../../models/produit.model';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 declare const bootstrap: any;
 
@@ -22,10 +24,10 @@ export class ListProduits implements OnInit {
 
   // Données brutes (non filtrées)
   allProduitsGroupes: ProduitsParBoutique[] = [];
-  
+
   // Données affichées (après filtrage)
   produitsGroupes: ProduitsParBoutique[] = [];
-  
+
   loading = true;
   error = '';
 
@@ -42,14 +44,30 @@ export class ListProduits implements OnInit {
   filtrePrixMin: number | null = null;
   filtrePrixMax: number | null = null;
 
+  // État affichage filtres avancés
+  showAdvancedFilters = false;
+
+  // Subject pour déclencher le filtrage
+  private filterChange$ = new Subject<void>();
+
   constructor(
     private produitService: ProduitService,
     private favorisService: FavorisService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadProduits();
+
+    this.filterChange$
+      .pipe(debounceTime(500)) // ⏱️ 500 ms
+      .subscribe(() => {
+        this.applyFilters();
+      });
+  }
+
+  toggleAdvancedFilters(): void {
+    this.showAdvancedFilters = !this.showAdvancedFilters;
   }
 
   ngAfterViewInit() {
@@ -137,7 +155,7 @@ export class ListProduits implements OnInit {
 
   // Méthode appelée à chaque changement de filtre
   onFilterChange(): void {
-    this.applyFilters();
+    this.filterChange$.next();
   }
 
   openDetails(produit: Produit) {

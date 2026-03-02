@@ -3,82 +3,102 @@
 <div class="page-wrapper">
   <div class="produits-container">
     <!-- ZONE FILTRES -->
+    <!-- ZONE FILTRES -->
     <div class="card mb-4 shadow-sm">
       <div class="card-body">
-        <div class="row g-3">
-
+        <!-- MODE NORMAL -->
+        <div class="row g-3 align-items-end">
           <div class="col-md-4 col-sm-6">
             <label class="form-label">Nom boutique</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              placeholder="Contient..." 
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Contient..."
               [(ngModel)]="filtreNomBoutique"
               (input)="onFilterChange()"
-            >
+            />
           </div>
 
           <div class="col-md-4 col-sm-6">
             <label class="form-label">Nom produit</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              placeholder="Contient..." 
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Contient..."
               [(ngModel)]="filtreNomProduit"
               (input)="onFilterChange()"
-            >
+            />
           </div>
 
-          <div class="col-md-2 col-sm-6">
-            <label class="form-label">Qté min</label>
-            <input 
-              type="number" 
-              class="form-control" 
-              min="0"
-              [(ngModel)]="filtreQtMin"
-              (input)="onFilterChange()"
+          <!-- Bouton toggle avancé -->
+          <div class="col-md-4 col-sm-12 text-md-end">
+            <button
+              class="btn btn-link text-decoration-none fw-semibold"
+              (click)="toggleAdvancedFilters()"
             >
-          </div>
-
-          <div class="col-md-2 col-sm-6">
-            <label class="form-label">Qté max</label>
-            <input 
-              type="number" 
-              class="form-control" 
-              min="0"
-              [(ngModel)]="filtreQtMax"
-              (input)="onFilterChange()"
-            >
-          </div>
-
-          <div class="col-md-2 col-sm-6">
-            <label class="form-label">Prix min (Ar)</label>
-            <input 
-              type="number" 
-              class="form-control" 
-              min="0"
-              [(ngModel)]="filtrePrixMin"
-              (input)="onFilterChange()"
-            >
-          </div>
-
-          <div class="col-md-2 col-sm-6">
-            <label class="form-label">Prix max (Ar)</label>
-            <input 
-              type="number" 
-              class="form-control" 
-              min="0"
-              [(ngModel)]="filtrePrixMax"
-              (input)="onFilterChange()"
-            >
-          </div>
-
-          <div class="col-md-2 d-flex align-items-end">
-            <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
-              Réinitialiser
+              Filtres avancés
+              <i
+                class="bi ms-1"
+                [ngClass]="showAdvancedFilters ? 'bi-chevron-up' : 'bi-chevron-down'"
+              >
+              </i>
             </button>
           </div>
+        </div>
 
+        <!-- MODE AVANCÉ -->
+        <div *ngIf="showAdvancedFilters" class="mt-4 border-top pt-4">
+          <div class="row g-3">
+            <div class="col-md-2 col-sm-6">
+              <label class="form-label">Qté min</label>
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                [(ngModel)]="filtreQtMin"
+                (input)="onFilterChange()"
+              />
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+              <label class="form-label">Qté max</label>
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                [(ngModel)]="filtreQtMax"
+                (input)="onFilterChange()"
+              />
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+              <label class="form-label">Prix min (Ar)</label>
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                [(ngModel)]="filtrePrixMin"
+                (input)="onFilterChange()"
+              />
+            </div>
+
+            <div class="col-md-2 col-sm-6">
+              <label class="form-label">Prix max (Ar)</label>
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                [(ngModel)]="filtrePrixMax"
+                (input)="onFilterChange()"
+              />
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
+                Réinitialiser
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -95,46 +115,40 @@
 
     <!-- Groupes par boutique -->
     <div *ngFor="let groupe of produitsGroupes" class="mb-5">
-
       <h3 class="mb-4 border-bottom pb-2">
         {{ groupe.boutique.nom }}
       </h3>
 
       <div class="row g-4">
         <div class="col-xl-3 col-lg-4 col-md-6" *ngFor="let produit of groupe.produits">
-          <div class="card h-100 shadow-sm position-relative product-card"
-               (click)="openDetails(produit)">
-
+          <div
+            class="card h-100 shadow-sm position-relative product-card"
+            (click)="openDetails(produit)"
+          >
             <!-- Cœur favoris (uniquement pour client) -->
-            <button 
+            <button
               *ngIf="isClient"
               class="btn btn-sm position-absolute top-0 end-0 m-2 p-0 bg-transparent border-0 favorite-btn"
               (click)="toggleFavorite(produit); $event.stopPropagation()"
               title="{{ produit.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
             >
-              <i class="bi"
-                [ngClass]="produit.isFavorite ? 'bi-heart-fill text-danger' : 'bi-heart text-muted'">
+              <i
+                class="bi"
+                [ngClass]="produit.isFavorite ? 'bi-heart-fill text-danger' : 'bi-heart text-muted'"
+              >
               </i>
             </button>
 
-            <img
-              [src]="produit.image"
-              class="card-img-top"
-              alt="{{ produit.nom }}"
-            />
+            <img [src]="produit.image" class="card-img-top" alt="{{ produit.nom }}" />
 
             <div class="card-body d-flex flex-column">
               <h5 class="card-title">{{ produit.nom }}</h5>
 
-              <p class="card-text text-muted mb-1">
-                Stock : {{ produit.qt_actuel }}
-              </p>
+              <p class="card-text text-muted mb-1">Stock : {{ produit.qt_actuel }}</p>
 
               <div class="mt-auto d-flex justify-content-between align-items-center">
-                <p class="fw-bold text-primary mb-0">
-                  {{ produit.prix_actuel | number }} Ar
-                </p>
-                <button 
+                <p class="fw-bold text-primary mb-0">{{ produit.prix_actuel | number }} Ar</p>
+                <button
                   class="btn btn-outline-primary btn-sm"
                   (click)="openDetails(produit); $event.stopPropagation()"
                 >
@@ -145,18 +159,23 @@
           </div>
         </div>
       </div>
-
     </div>
-
   </div>
 </div>
 
 <!-- ===================== MODAL DÉTAILS PRODUIT ==================== -->
-<div class="modal fade" id="produitDetailModal" tabindex="-1" aria-labelledby="produitModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="produitDetailModal"
+  tabindex="-1"
+  aria-labelledby="produitModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    
-    <div class="modal-content border-0 shadow rounded-4 overflow-hidden" *ngIf="selectedProduit; else noProduit">
-
+    <div
+      class="modal-content border-0 shadow rounded-4 overflow-hidden"
+      *ngIf="selectedProduit; else noProduit"
+    >
       <!-- Header -->
       <div class="modal-header bg-light border-0 pb-2 pt-4 px-4 px-md-5">
         <h5 class="modal-title fw-bold fs-4" id="produitModalLabel">
@@ -168,31 +187,32 @@
       <!-- Body -->
       <div class="modal-body px-4 px-md-5 pb-4">
         <div class="row g-4 align-items-start">
-
           <!-- Photo (à gauche, taille contrôlée) -->
           <div class="col-md-5 text-center">
-            <img 
-              [src]="selectedProduit.image" 
-              class="img-fluid rounded-3 shadow-sm" 
+            <img
+              [src]="selectedProduit.image"
+              class="img-fluid rounded-3 shadow-sm"
               alt="{{ selectedProduit.nom }}"
-              style="max-height: 320px; object-fit: contain; width: auto;"
-            >
+              style="max-height: 320px; object-fit: contain; width: auto"
+            />
           </div>
 
           <!-- Infos texte (à droite) -->
           <div class="col-md-7">
             <!-- Prix -->
             <h4 class="fw-bold text-primary mb-3">
-              {{ selectedProduit.prix_actuel | number:'1.0-0' }} Ar
+              {{ selectedProduit.prix_actuel | number: '1.0-0' }} Ar
             </h4>
 
             <!-- Stock -->
             <p class="mb-3">
-              <strong>Stock :</strong> 
-              <span [ngClass]="{
-                'text-success fw-bold': selectedProduit.qt_actuel > 0,
-                'text-danger fw-bold': selectedProduit.qt_actuel <= 0
-              }">
+              <strong>Stock :</strong>
+              <span
+                [ngClass]="{
+                  'text-success fw-bold': selectedProduit.qt_actuel > 0,
+                  'text-danger fw-bold': selectedProduit.qt_actuel <= 0,
+                }"
+              >
                 {{ selectedProduit.qt_actuel }}
               </span>
               <span *ngIf="selectedProduit.qt_actuel <= 0" class="text-danger ms-2">(rupture)</span>
@@ -200,20 +220,18 @@
 
             <!-- Boutique -->
             <p class="mb-4">
-              <strong>Boutique :</strong> 
+              <strong>Boutique :</strong>
               {{ selectedProduit.boutique?.nom || 'Non renseignée' }}
             </p>
 
             <!-- Description complète -->
             <div class="mb-3">
               <strong>Description :</strong>
-              <p class="mt-2 text-muted" 
-                style="white-space: pre-line; line-height: 1.6;">
+              <p class="mt-2 text-muted" style="white-space: pre-line; line-height: 1.6">
                 {{ selectedProduit.description || 'Aucune description disponible.' }}
               </p>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -223,7 +241,6 @@
           Fermer
         </button>
       </div>
-
     </div>
 
     <!-- Cas où selectedProduit est null (rare normalement) -->
@@ -232,7 +249,6 @@
         <p class="text-muted fs-5">Aucun produit sélectionné</p>
       </div>
     </ng-template>
-
   </div>
 </div>
 
