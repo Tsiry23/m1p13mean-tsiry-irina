@@ -49,7 +49,8 @@
               <!-- Info quantité actuelle -->
               <div class="mb-3" *ngIf="!isEntreeMode">
                 <label class="form-label">Quantité actuelle</label>
-                <input type="number" class="form-control" [(ngModel)]="currentProduit.qt_actuel" name="currentProduit.qt_actuel" [disabled]="isEntreeMode">
+
+                <input type="number" class="form-control" [(ngModel)]="currentProduit.qt_actuel" name="qt_actuel" [disabled]="isEntreeMode">
               </div>
 
               <!-- Champs modification (cachés ou désactivés en entrée) -->
@@ -76,7 +77,7 @@
 
           <div class="d-flex gap-2 mt-4">
             <button type="submit" class="btn" [ngClass]="submitButtonClass"
-                    [disabled]="isEntreeMode && quantiteAjout <= 0">
+                    [disabled]="(isEntreeMode && quantiteAjout <= 0) || loading">
               {{ submitButtonText }}
             </button>
             <button type="button" class="btn btn-outline-secondary" (click)="closeForm()">Annuler</button>
