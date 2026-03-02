@@ -4,7 +4,6 @@ export interface Boutique {
   nom: string;
   
   email?: string;
-  nom_emplacement?: string;
 
   description?: string | null;
 

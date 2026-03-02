@@ -52,22 +52,15 @@ export class Login {
       next: (response: any) => {
         this.loading = false;
         this.cdr.detectChanges();
-        if (response.role === 'admin du centre commercial') {
-          this.router.navigate(['/admin-cc']);
-        } else if (response.role === 'admin de boutique') {
+        
+        if (currentUrl.includes('/login/boutique')) {
           this.router.navigate(['/admin-boutique']);
+        } else if (currentUrl.includes('/login/mall')) {
+          this.router.navigate(['/admin-cc']);
         } else {
           // fallback de sécurité
           this.router.navigate(['/']);
         }
-        // if (currentUrl.includes('/login/boutique')) {
-        //   this.router.navigate(['/admin-boutique']);
-        // } else if (currentUrl.includes('/login/mall')) {
-        //   this.router.navigate(['/admin-cc']);
-        // } else {
-        //   // fallback de sécurité
-        //   this.router.navigate(['/']);
-        // }
       },
       error: (err) => {
         this.loading = false;

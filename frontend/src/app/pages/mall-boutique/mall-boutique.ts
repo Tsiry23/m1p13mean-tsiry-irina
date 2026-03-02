@@ -31,7 +31,6 @@ export class MallBoutique implements OnInit {
 
   currentBoutique: Boutique = {
     nom: '',
-    nom_emplacement: '',
     description: '',
     taille_m2: 0,
     loyer: 0,

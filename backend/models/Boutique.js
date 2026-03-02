@@ -2,13 +2,6 @@ const mongoose = require("mongoose");
 
 const BoutiqueSchema = new mongoose.Schema(
   {
-    nom_emplacement: {
-      type: String,
-      required: false,
-      unique: true,
-      trim: true,
-    },
-
     nom: {
       type: String,
       required: true,
