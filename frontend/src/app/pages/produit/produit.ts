@@ -18,6 +18,7 @@ export class ProduitComponent implements OnInit {
   showForm = false;
   isEditing = false;
   apiUrl = `${environment.apiBaseUrl}`;
+  loading = false;
 
   currentProduit: Produit = {
     _id: '',
@@ -137,7 +138,7 @@ export class ProduitComponent implements OnInit {
   }
 
   saveProduit() {
-    console.log("hey");
+    this.loading = true;
     if (this.isEditing && this.currentProduit._id) {
       this.produitService.updateProduit(this.currentProduit._id, this.currentProduit, this.selectedFile)
         .subscribe({
@@ -145,6 +146,8 @@ export class ProduitComponent implements OnInit {
             this.loadProduits();
             this.closeForm();
             alert('Produit modifié avec succès');
+            this.loading = true;
+            this.cdr.detectChanges();
           },
           error: (err) => {
             console.error(err);
